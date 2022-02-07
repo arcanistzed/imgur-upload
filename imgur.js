@@ -1,11 +1,13 @@
-async function upload(file) {
+async function upload(path) {
     const clientID = "c8f504ae93f9a0d";
+
+    const blob = await (await fetch(path)).blob();
+
+    const formData = new FormData();
+    formData.append("image", blob);
 
     const headers = new Headers();
     headers.append("Authorization", `Client-ID ${clientID}`);
-
-    const formData = new FormData();
-    formData.append("image", file);
 
     const options = {
         method: "POST",
@@ -20,5 +22,8 @@ async function upload(file) {
     const json = await response.json();
     const url = json.success ? json.data.link : null;
 
-    return {response, rateLimit, json, url};
+    if (url) {
+        console.log(`Uploaded file at "${path}" to "${url}"`, { response, rateLimit, json, url });
+        return url;
+    }
 }

@@ -16,6 +16,7 @@ async function findAssets() {
     console.groupCollapsed("Bulk replace scenes");
     for (const scene of game.scenes) {
         if (scene.data.img?.startsWith(find)) {
+            const replace = upload(scene.data.img);
             console.log(
                 `${scene.name}.img: ${scene.data.img} => ${scene.data.img.replace(
                     find,
@@ -23,10 +24,11 @@ async function findAssets() {
                 )}`
             );
             if (!dryRun) {
-                await scene.update({ img: scene.data.img.replace(find, replace) });
+                await scene.update({ img: replace });
             }
         }
         if (scene.data.foreground?.startsWith(find)) {
+            const replace = upload(scene.data.foreground);
             console.log(
                 `${scene.name}.foreground: ${scene.data.foreground
                 } => ${scene.data.foreground.replace(find, replace)}`
@@ -41,6 +43,7 @@ async function findAssets() {
         let shownGroup = false;
         for (const token of scene.tokens) {
             if (token.data.img?.startsWith(find)) {
+                const replace = upload(token.data.img);
                 if (!shownGroup) {
                     console.groupCollapsed(`${scene.name} tokens`);
                     shownGroup = true;
@@ -53,7 +56,7 @@ async function findAssets() {
                 );
                 tokenUpdates.push({
                     _id: token.id,
-                    img: token.data.img.replace(find, replace),
+                    img: replace,
                 });
             }
         }
@@ -67,6 +70,7 @@ async function findAssets() {
         shownGroup = false;
         for (const tile of scene.tiles) {
             if (tile.data.img?.startsWith(find)) {
+                const replace = upload(tile.data.img);
                 if (!shownGroup) {
                     console.groupCollapsed(`${scene.name} tiles`);
                     shownGroup = true;
@@ -79,7 +83,7 @@ async function findAssets() {
                 );
                 tileUpdates.push({
                     _id: tile.id,
-                    img: tile.data.img.replace(find, replace),
+                    img: replace,
                 });
             }
         }
@@ -95,6 +99,7 @@ async function findAssets() {
     console.groupCollapsed("Bulk replace actors");
     for (const actor of game.actors) {
         if (actor.data.img?.startsWith(find)) {
+            const replace = upload(actor.data.img);
             console.log(
                 `${actor.name}.img: ${actor.data.img} => ${actor.data.img.replace(
                     find,
@@ -102,7 +107,7 @@ async function findAssets() {
                 )}`
             );
             if (!dryRun)
-                await actor.update({ img: actor.data.img.replace(find, replace) });
+                await actor.update({ img: replace });
         }
         if (actor.data.token.img?.startsWith(find)) {
             console.log(
@@ -119,17 +124,18 @@ async function findAssets() {
         shownGroup = false;
         for (const item of actor.data.items) {
             if (item.data.img?.startsWith(find)) {
+                const replace = upload(item.data.img);
                 if (!shownGroup) {
                     console.groupCollapsed(`${actor.name} tokens`);
                     shownGroup = true;
                 }
                 console.log(
                     `${actor.name} ${item.name} item.img: ${item.data.img
-                    } => ${item.data.img.replace(find, replace)}`
+                    } => ${replace}`
                 );
                 itemUpdates.push({
                     _id: item.id,
-                    img: item.data.img.replace(find, replace),
+                    img: replace,
                 });
             }
         }
@@ -143,17 +149,18 @@ async function findAssets() {
         shownGroup = false;
         for (const effect of actor.data.effects) {
             if (effect.data.img?.startsWith(find)) {
+                const replace = upload(effect.data.img);
                 if (!shownGroup) {
                     console.groupCollapsed(`${actor.name} effects`);
                     shownGroup = true;
                 }
                 console.log(
                     `${actor.name} ${effect.name} effect.img: ${effect.data.img
-                    } => ${effect.data.img.replace(find, replace)}`
+                    } => ${replace}`
                 );
                 effectUpdates.push({
                     _id: effect.id,
-                    img: effect.data.img.replace(find, replace),
+                    img: replace,
                 });
             }
         }
@@ -169,6 +176,7 @@ async function findAssets() {
     console.groupCollapsed("Bulk replace items");
     for (const item of game.items) {
         if (item.data.img?.startsWith(find)) {
+            const replace = upload(item.data.img);
             console.log(
                 `${item.name}.img: ${item.data.img} => ${item.data.img.replace(
                     find,
@@ -176,24 +184,25 @@ async function findAssets() {
                 )}`
             );
             if (!dryRun) {
-                await item.update({ img: item.data.img.replace(find, replace) });
+                await item.update({ img: replace });
             }
         }
         const effectUpdates = [];
         shownGroup = false;
         for (const effect of item.data.effects) {
             if (effect.data.img?.startsWith(find)) {
+                const replace = upload(effect.data.img);
                 if (!shownGroup) {
                     console.groupCollapsed(`${item.name} effects`);
                     shownGroup = true;
                 }
                 console.log(
                     `${item.name} ${effect.name} effect.img: ${effect.data.img
-                    } => ${effect.data.img.replace(find, replace)}`
+                    } => ${replace}`
                 );
                 effectUpdates.push({
                     _id: effect.id,
-                    img: effect.data.img.replace(find, replace),
+                    img: replace,
                 });
             }
         }
@@ -209,13 +218,14 @@ async function findAssets() {
     console.groupCollapsed("Bulk replace journals");
     for (const journal of game.journal) {
         if (journal.data.img?.startsWith(find)) {
+            const replace = upload(journal.data.img);
             console.log(
                 `${journal.name}.img: ${journal.data.img
-                } => ${journal.data.img.replace(find, replace)}`
+                } => ${replace}`
             );
             if (!dryRun) {
                 await journal.update({
-                    img: journal.data.img.replace(find, replace),
+                    img: replace,
                 });
             }
         }
