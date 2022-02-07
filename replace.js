@@ -1,3 +1,5 @@
+import upload from "./imgur.js";
+
 /*
  * Bulk replace asset references
  */
@@ -240,7 +242,6 @@ async function findAssets() {
                     hasContentUpdate = true;
                 }
             }
-            // TODO: <object>
 
             if (hasContentUpdate && !dryRun) {
                 await journal.update({
@@ -250,4 +251,30 @@ async function findAssets() {
         }
     }
     console.groupEnd();
+
+    /* FIXME: Currently does not update source files. This should be plugged in to JE, Actor bio, & Item description updating as well as possibly updating the stylesheets linked in the manifest.
+    console.groupCollapsed("Bulk replace CSS");
+    const rules = [
+        ...[...document.styleSheets].map(sheet => [...sheet.cssRules]).flat(), // Style sheets
+        ...[...document.querySelectorAll("*")], // Elements
+    ];
+    for (const rule of rules) {
+        [
+            "backgroundImage",
+            "listStyleImage",
+            "borderImageSource"
+        ]
+            .forEach(location => {
+                if (rule.style?.[location]?.match(/url\(["']?([^"']*)["']?\)/i)?.[1]?.startsWith(find)) {
+                    console.log(
+                        `${rule.selectorText ?? rule.tagName}.style: ${rule.style?.[location]} => ${rule.style?.[location].replace(find, replace)}`
+                    );
+                    rule.style[location] = rule.style?.[location].replace(find, replace);
+                    rule.cssText
+                    hasContentUpdate = true;
+                }
+            });
+    }
+    console.groupEnd();
+    */
 }
