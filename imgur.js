@@ -25,5 +25,8 @@ async function upload(path) {
     if (url) {
         console.log(`Uploaded file at "${path}" to "${url}"`, { response, rateLimit, json, url });
         return url;
+    } else {
+        console.error(`Error uploading file at "${path}": ${json.data.error}`, { response, rateLimit, json, url });
+        return null;
     }
 }
