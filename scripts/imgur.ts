@@ -1,4 +1,4 @@
-async function upload(path) {
+export default async function upload(path: string) {
     const clientID = "c8f504ae93f9a0d";
 
     const blob = await (await fetch(path)).blob();
@@ -13,7 +13,7 @@ async function upload(path) {
         method: "POST",
         headers: headers,
         body: formData,
-        redirect: "follow",
+        redirect: "follow" as const,
     };
 
     const response = await fetch("https://api.imgur.com/3/image", options);
