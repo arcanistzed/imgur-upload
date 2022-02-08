@@ -1,32 +1,46 @@
 export default async function upload(path: string) {
-    const clientID = "c8f504ae93f9a0d";
+	const clientID = "c8f504ae93f9a0d";
 
-    const blob = await (await fetch(path)).blob();
+	const blob = await (await fetch(path)).blob();
 
-    const formData = new FormData();
-    formData.append("image", blob);
+	const formData = new FormData();
+	formData.append("image", blob);
 
-    const headers = new Headers();
-    headers.append("Authorization", `Client-ID ${clientID}`);
+	const headers = new Headers();
+	headers.append("Authorization", `Client-ID ${clientID}`);
 
-    const options = {
-        method: "POST",
-        headers: headers,
-        body: formData,
-        redirect: "follow" as const,
-    };
+	const options = {
+		method: "POST",
+		headers: headers,
+		body: formData,
+		redirect: "follow" as const,
+	};
 
-    const response = await fetch("https://api.imgur.com/3/image", options);
-    const rateLimit = Object.fromEntries([...response.headers.entries()].filter(h => h[0].startsWith("x-ratelimit")));
+	const response = await fetch("https://api.imgur.com/3/image", options);
+	const rateLimit = Object.fromEntries(
+		[...response.headers.entries()].filter(h =>
+			h[0].startsWith("x-ratelimit")
+		)
+	);
 
-    const json = await response.json();
-    const url = json.success ? json.data.link : null;
+	const json = await response.json();
+	const url = json.success ? json.data.link : null;
 
-    if (url) {
-        console.log(`Uploaded file at "${path}" to "${url}"`, { response, rateLimit, json, url });
-        return url;
-    } else {
-        console.error(`Error uploading file at "${path}": ${json.data.error}`, { response, rateLimit, json, url });
-        return null;
-    }
+	if (url) {
+		console.log(`Uploaded file at "${path}" to "${url}"`, {
+			response,
+			rateLimit,
+			json,
+			url,
+		});
+		return url;
+	} else {
+		console.error(`Error uploading file at "${path}": ${json.data.error}`, {
+			response,
+			rateLimit,
+			json,
+			url,
+		});
+		return null;
+	}
 }
