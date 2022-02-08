@@ -1,0 +1,57 @@
+{
+  "name": "imgur-sync",
+  "title": "Imgur Sync",
+  "description": "A module for syncing your assets to Imgur",
+  "author": "Arcanist, Ethck",
+  "authors": [
+    {
+      "name": "Arcanist",
+      "url": "https://arcanistzed.github.io/",
+      "email": "arcanistzed@gmail.com",
+      "discord": "arcanist#4317",
+      "reddit": "u/arcanistzed"
+    },
+    {
+      "name": "Ethck",
+      "discord": "Ethck#6879"
+    }
+  ],
+  "url": "This is auto replaced",
+  "license": "https://github.com/arcanistzed/imgur-sync/blob/main/LICENSE",
+  "readme": "https://github.com/arcanistzed/imgur-sync/blob/main/README.md",
+  "bugs": "https://github.com/arcanistzed/imgur-sync/issues/new/choose",
+  "changelog": "https://github.com/arcanistzed/imgur-sync/blob/main/CHANGELOG.md",
+  "flags": {
+    "allowBugReporter": true
+  },
+  "version": "This is auto replaced",
+  "minimumCoreVersion": "9",
+  "compatibleCoreVersion": "9",
+  "scripts": [],
+  "esmodules": [
+    "scripts/dist/imgur-sync.js"
+  ],
+  "styles": [
+    "styles/module.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "languages/en.json"
+    }
+  ],
+  "packs": [],
+  "system": [],
+  "dependencies": [],
+  "manifest": "This is auto replaced",
+  "download": "This is auto replaced",
+  "library": false,
+  "manifestPlusVersion": "1.2.0",
+  "media": [
+    {
+      "type": "cover",
+      "url": ""
+    }
+  ]
+}

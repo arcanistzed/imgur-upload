@@ -1,9 +1,9 @@
-import upload from "./imgur.js";
+import upload from "./upload";
 
 /**
  * Bulk replace asset references
  */
-async function findAssets() {
+export default async function findAssets() {
 	if (
 		game instanceof Game &&
 		game.scenes &&
