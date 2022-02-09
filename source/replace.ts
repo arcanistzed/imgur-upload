@@ -1,4 +1,4 @@
-import upload from "./upload";
+import upload from "./upload.js";
 
 /**
  * Bulk replace asset references
