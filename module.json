@@ -29,7 +29,7 @@
   "compatibleCoreVersion": "9",
   "scripts": [],
   "esmodules": [
-    "scripts/dist/imgur-sync.js"
+    "dist/imgur-sync.js"
   ],
   "styles": [
     "styles/module.css"
