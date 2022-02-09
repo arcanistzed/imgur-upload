@@ -1,15 +1,15 @@
 {
 	"compilerOptions": {
 		"typeRoots": [
-			"../../node_modules/@types",
-			"../../node_modules/@league-of-foundry-developers"
+			"../node_modules/@types",
+			"../node_modules/@league-of-foundry-developers"
 		],
 		"moduleResolution": "node",
 		"strict": true,
 		"target": "es2021",
-		"outDir": "../dist",
+		"outDir": "dist",
 	},
 	"include": [
-		"../source"
+		"source"
 	]
 }
