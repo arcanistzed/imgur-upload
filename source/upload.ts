@@ -16,7 +16,14 @@ export default async function upload(path: string) {
 		redirect: "follow" as const,
 	};
 
-	const response = await fetch("https://api.imgur.com/3/image", options);
+	let response;
+	try {
+		response = await fetch("https://api.imgur.com/3/image", options);
+	} catch {
+		console.log("Failed to fetch", options);
+		return;
+	}
+
 	const rateLimit = Object.fromEntries(
 		[...response.headers.entries()].filter(h =>
 			h[0].startsWith("x-ratelimit")
