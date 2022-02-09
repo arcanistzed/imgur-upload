@@ -8,5 +8,8 @@
 		"strict": true,
 		"target": "es2021",
 		"outDir": "../dist",
-	}
+	},
+	"include": [
+		"../source"
+	]
 }
