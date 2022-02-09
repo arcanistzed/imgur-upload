@@ -12,6 +12,11 @@ In the setup screen, use the URL `https://github.com/arcanistzed/imgur-sync/rele
 ## Usage
 
 
+## Development
+
+You can compile the TypeScript in watch mode by running `tsc -w` in the root directory or use `tsc --build` to compile it once.
+In order for your development version of the module to show up in Foundry VTT, you must [symlink](https://world-smiths.github.io/documentation/wiki/symlinking.html) it.
+
 ## Support
 
 Please consider supporting me on [my Patreon](https://patreon.com/arcanistzed) if you like my work. You can see a list of all my projects on [my website](https://arcanist.me).
