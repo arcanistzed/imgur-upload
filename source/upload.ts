@@ -18,29 +18,29 @@ export default async function uploadImages(dryRun: boolean = true) {
 		console.groupCollapsed("Uploading scenes to Imgur...");
 		for (const scene of game.scenes) {
 			if (scene.data.img?.startsWith(find)) {
-				const replace = await upload(scene.data.img);
-				if (replace) {
+				const uploaded = await upload(scene.data.img);
+				if (uploaded) {
 					console.log(
 						`${scene.name}.img: ${
 							scene.data.img
-						} => ${scene.data.img.replace(find, replace)}`
+						} => ${scene.data.img.replace(find, uploaded)}`
 					);
 					if (!dryRun) {
-						await scene.update({ img: replace });
+						await scene.update({ img: uploaded });
 					}
 				}
 			}
 			if (scene.data.foreground?.startsWith(find)) {
-				const replace = await upload(scene.data.foreground);
-				if (replace) {
+				const uploaded = await upload(scene.data.foreground);
+				if (uploaded) {
 					console.log(
 						`${scene.name}.foreground: ${
 							scene.data.foreground
-						} => ${scene.data.foreground.replace(find, replace)}`
+						} => ${scene.data.foreground.replace(find, uploaded)}`
 					);
 					if (!dryRun) {
 						await scene.update({
-							img: scene.data.foreground.replace(find, replace),
+							img: scene.data.foreground.replace(find, uploaded),
 						});
 					}
 				}
@@ -49,8 +49,8 @@ export default async function uploadImages(dryRun: boolean = true) {
 			let shownGroup = false;
 			for (const token of scene.tokens) {
 				if (token.data.img?.startsWith(find)) {
-					const replace = await upload(token.data.img);
-					if (replace) {
+					const uploaded = await upload(token.data.img);
+					if (uploaded) {
 						if (!shownGroup) {
 							console.groupCollapsed(`${scene.name} tokens`);
 							shownGroup = true;
@@ -58,11 +58,11 @@ export default async function uploadImages(dryRun: boolean = true) {
 						console.log(
 							`${token.name}.img: ${
 								token.data.img
-							} => ${token.data.img.replace(find, replace)}`
+							} => ${token.data.img.replace(find, uploaded)}`
 						);
 						tokenUpdates.push({
 							_id: token.id,
-							img: replace,
+							img: uploaded,
 						});
 					}
 				}
@@ -77,8 +77,8 @@ export default async function uploadImages(dryRun: boolean = true) {
 			shownGroup = false;
 			for (const tile of scene.tiles) {
 				if (tile.data.img?.startsWith(find)) {
-					const replace = await upload(tile.data.img);
-					if (replace) {
+					const uploaded = await upload(tile.data.img);
+					if (uploaded) {
 						if (!shownGroup) {
 							console.groupCollapsed(`${scene.name} tiles`);
 							shownGroup = true;
@@ -86,11 +86,11 @@ export default async function uploadImages(dryRun: boolean = true) {
 						console.log(
 							`tile.img: ${
 								tile.data.img
-							} => ${tile.data.img.replace(find, replace)}`
+							} => ${tile.data.img.replace(find, uploaded)}`
 						);
 						tileUpdates.push({
 							_id: tile.id,
-							img: replace,
+							img: uploaded,
 						});
 					}
 				}
@@ -107,25 +107,25 @@ export default async function uploadImages(dryRun: boolean = true) {
 		console.groupCollapsed("Uploading actors to Imgur...");
 		for (const actor of game.actors) {
 			if (actor.data.img?.startsWith(find)) {
-				const replace = await upload(actor.data.img);
-				if (replace) {
+				const uploaded = await upload(actor.data.img);
+				if (uploaded) {
 					console.log(
 						`${actor.name}.img: ${
 							actor.data.img
-						} => ${actor.data.img.replace(find, replace)}`
+						} => ${actor.data.img.replace(find, uploaded)}`
 					);
-					if (!dryRun) await actor.update({ img: replace });
+					if (!dryRun) await actor.update({ img: uploaded });
 				}
 			}
 			if (actor.data.token.img?.startsWith(find)) {
-				const replace = await upload(actor.data.token.img);
-				if (replace) {
+				const uploaded = await upload(actor.data.token.img);
+				if (uploaded) {
 					console.log(
-						`${actor.data.token.name}.token.img: ${actor.data.token.img} => ${replace}`
+						`${actor.data.token.name}.token.img: ${actor.data.token.img} => ${uploaded}`
 					);
 					if (!dryRun) {
 						await actor.update({
-							token: { img: replace },
+							token: { img: uploaded },
 						});
 					}
 				}
@@ -134,18 +134,18 @@ export default async function uploadImages(dryRun: boolean = true) {
 			let shownGroup = false;
 			for (const item of actor.data.items) {
 				if (item.data.img?.startsWith(find)) {
-					const replace = await upload(item.data.img);
-					if (replace) {
+					const uploaded = await upload(item.data.img);
+					if (uploaded) {
 						if (!shownGroup) {
 							console.groupCollapsed(`${actor.name} tokens`);
 							shownGroup = true;
 						}
 						console.log(
-							`${actor.name} ${item.name} item.img: ${item.data.img} => ${replace}`
+							`${actor.name} ${item.name} item.img: ${item.data.img} => ${uploaded}`
 						);
 						itemUpdates.push({
 							_id: item.id,
-							img: replace,
+							img: uploaded,
 						});
 					}
 				}
@@ -160,18 +160,18 @@ export default async function uploadImages(dryRun: boolean = true) {
 			shownGroup = false;
 			for (const effect of actor.data.effects) {
 				if (effect.data.icon?.startsWith(find)) {
-					const replace = upload(effect.data.icon);
-					if (replace) {
+					const uploaded = upload(effect.data.icon);
+					if (uploaded) {
 						if (!shownGroup) {
 							console.groupCollapsed(`${actor.name} effects`);
 							shownGroup = true;
 						}
 						console.log(
-							`${actor.name} ${effect.name} effect.img: ${effect.data.icon} => ${replace}`
+							`${actor.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`
 						);
 						effectUpdates.push({
 							_id: effect.id,
-							img: replace,
+							img: uploaded,
 						});
 					}
 				}
@@ -191,15 +191,15 @@ export default async function uploadImages(dryRun: boolean = true) {
 		console.groupCollapsed("Uploading items to Imgur...");
 		for (const item of game.items) {
 			if (item.data.img?.startsWith(find)) {
-				const replace = await upload(item.data.img);
-				if (replace) {
+				const uploaded = await upload(item.data.img);
+				if (uploaded) {
 					console.log(
 						`${item.name}.img: ${
 							item.data.img
-						} => ${item.data.img.replace(find, replace)}`
+						} => ${item.data.img.replace(find, uploaded)}`
 					);
 					if (!dryRun) {
-						await item.update({ img: replace });
+						await item.update({ img: uploaded });
 					}
 				}
 			}
@@ -207,18 +207,18 @@ export default async function uploadImages(dryRun: boolean = true) {
 			let shownGroup = false;
 			for (const effect of item.data.effects) {
 				if (effect.data.icon?.startsWith(find)) {
-					const replace = upload(effect.data.icon);
-					if (replace) {
+					const uploaded = upload(effect.data.icon);
+					if (uploaded) {
 						if (!shownGroup) {
 							console.groupCollapsed(`${item.name} effects`);
 							shownGroup = true;
 						}
 						console.log(
-							`${item.name} ${effect.name} effect.img: ${effect.data.icon} => ${replace}`
+							`${item.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`
 						);
 						effectUpdates.push({
 							_id: effect.id,
-							img: replace,
+							img: uploaded,
 						});
 					}
 				}
@@ -238,14 +238,14 @@ export default async function uploadImages(dryRun: boolean = true) {
 		console.groupCollapsed("Uploading journals to Imgur...");
 		for (const journal of game.journal) {
 			if (journal.data.img?.startsWith(find)) {
-				const replace = await upload(journal.data.img);
-				if (replace) {
+				const uploaded = await upload(journal.data.img);
+				if (uploaded) {
 					console.log(
-						`${journal.name}.img: ${journal.data.img} => ${replace}`
+						`${journal.name}.img: ${journal.data.img} => ${uploaded}`
 					);
 					if (!dryRun) {
 						await journal.update({
-							img: replace,
+							img: uploaded,
 						});
 					}
 				}
@@ -258,14 +258,14 @@ export default async function uploadImages(dryRun: boolean = true) {
 				);
 				for (const link of doc.getElementsByTagName("img")) {
 					if (link.src?.startsWith(find)) {
-						const replace = await upload(link.src);
-						if (replace) {
+						const uploaded = await upload(link.src);
+						if (uploaded) {
 							console.log(
 								`${journal.name}.img: ${
 									link.src
-								} => ${link.src.replace(find, replace)}`
+								} => ${link.src.replace(find, uploaded)}`
 							);
-							link.src.replace(find, replace);
+							link.src.replace(find, uploaded);
 							hasContentUpdate = true;
 						}
 					}
@@ -295,9 +295,9 @@ export default async function uploadImages(dryRun: boolean = true) {
 				.forEach(location => {
 					if (rule.style?.[location]?.match(/url\(["']?([^"']*)["']?\)/i)?.[1]?.startsWith(find)) {
 						console.log(
-							`${rule.selectorText ?? rule.tagName}.style: ${rule.style?.[location]} => ${rule.style?.[location].replace(find, replace)}`
+							`${rule.selectorText ?? rule.tagName}.style: ${rule.style?.[location]} => ${rule.style?.[location].replace(find, uploaded)}`
 						);
-						rule.style[location] = rule.style?.[location].replace(find, replace);
+						rule.style[location] = rule.style?.[location].replace(find, uploaded);
 						rule.cssText
 					}
 				});
