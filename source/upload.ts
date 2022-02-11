@@ -26,7 +26,7 @@ export default async function upload(path: string): Promise<string | null> {
 		response = await fetch("https://api.imgur.com/3/image", options);
 	} catch {
 		console.log("Failed to fetch", options);
-		return;
+		return null;
 	}
 
 	const rateLimit = Object.fromEntries(
