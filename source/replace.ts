@@ -3,7 +3,7 @@ import upload from "./upload.js";
 /**
  * Bulk replace asset references
  */
-export default async function findAssets(dryRun = true) {
+export default async function uploadImages(dryRun: boolean = true) {
 	if (
 		game instanceof Game &&
 		game.scenes &&
