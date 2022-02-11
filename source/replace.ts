@@ -3,7 +3,7 @@ import upload from "./upload.js";
 /**
  * Bulk replace asset references
  */
-export default async function findAssets() {
+export default async function findAssets(dryRun = true) {
 	if (
 		game instanceof Game &&
 		game.scenes &&
@@ -12,7 +12,6 @@ export default async function findAssets() {
 		game.journal
 	) {
 		const find = `worlds/${game.world.id}`;
-		const dryRun = true;
 		if (!find) {
 			console.warn("Bulk replace asset references: No value provided");
 			return;
@@ -285,28 +284,28 @@ export default async function findAssets() {
 		console.groupEnd();
 
 		/* FIXME: Currently does not update source files. This should be plugged in to JE, Actor bio, & Item description updating as well as possibly updating the stylesheets linked in the manifest.
-        console.groupCollapsed("Bulk replace CSS");
-        const rules = [
-            ...[...document.styleSheets].map(sheet => [...sheet.cssRules]).flat(), // Style sheets
-            ...[...document.querySelectorAll("*")], // Elements
-        ];
-        for (const rule of rules) {
-            [
-                "backgroundImage",
-                "listStyleImage",
-                "borderImageSource"
-            ]
-                .forEach(location => {
-                    if (rule.style?.[location]?.match(/url\(["']?([^"']*)["']?\)/i)?.[1]?.startsWith(find)) {
-                        console.log(
-                            `${rule.selectorText ?? rule.tagName}.style: ${rule.style?.[location]} => ${rule.style?.[location].replace(find, replace)}`
-                        );
-                        rule.style[location] = rule.style?.[location].replace(find, replace);
-                        rule.cssText
-                    }
-                });
-        }
-        console.groupEnd();
-        */
+		console.groupCollapsed("Bulk replace CSS");
+		const rules = [
+			...[...document.styleSheets].map(sheet => [...sheet.cssRules]).flat(), // Style sheets
+			...[...document.querySelectorAll("*")], // Elements
+		];
+		for (const rule of rules) {
+			[
+				"backgroundImage",
+				"listStyleImage",
+				"borderImageSource"
+			]
+				.forEach(location => {
+					if (rule.style?.[location]?.match(/url\(["']?([^"']*)["']?\)/i)?.[1]?.startsWith(find)) {
+						console.log(
+							`${rule.selectorText ?? rule.tagName}.style: ${rule.style?.[location]} => ${rule.style?.[location].replace(find, replace)}`
+						);
+						rule.style[location] = rule.style?.[location].replace(find, replace);
+						rule.cssText
+					}
+				});
+		}
+		console.groupEnd();
+		*/
 	}
 }
