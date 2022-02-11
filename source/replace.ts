@@ -13,10 +13,6 @@ export default async function uploadImages(dryRun: boolean = true) {
 		game.journal
 	) {
 		const find = `worlds/${game.world.id}`;
-		if (!find) {
-			console.warn("Bulk replace asset references: No value provided");
-			return;
-		}
 		const domParser = new DOMParser();
 
 		console.groupCollapsed("Bulk replace scenes");
