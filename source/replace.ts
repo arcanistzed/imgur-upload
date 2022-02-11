@@ -15,7 +15,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 		const find = `worlds/${game.world.id}`;
 		const domParser = new DOMParser();
 
-		console.groupCollapsed("Bulk replace scenes");
+		console.groupCollapsed("Uploading scenes to Imgur...");
 		for (const scene of game.scenes) {
 			if (scene.data.img?.startsWith(find)) {
 				const replace = await upload(scene.data.img);
@@ -104,7 +104,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 		}
 		console.groupEnd();
 
-		console.groupCollapsed("Bulk replace actors");
+		console.groupCollapsed("Uploading actors to Imgur...");
 		for (const actor of game.actors) {
 			if (actor.data.img?.startsWith(find)) {
 				const replace = await upload(actor.data.img);
@@ -188,7 +188,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 		}
 		console.groupEnd();
 
-		console.groupCollapsed("Bulk replace items");
+		console.groupCollapsed("Uploading items to Imgur...");
 		for (const item of game.items) {
 			if (item.data.img?.startsWith(find)) {
 				const replace = await upload(item.data.img);
@@ -235,7 +235,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 		}
 		console.groupEnd();
 
-		console.groupCollapsed("Bulk replace journals");
+		console.groupCollapsed("Uploading journals to Imgur...");
 		for (const journal of game.journal) {
 			if (journal.data.img?.startsWith(find)) {
 				const replace = await upload(journal.data.img);
@@ -281,7 +281,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 		console.groupEnd();
 
 		/* FIXME: Currently does not update source files. This should be plugged in to JE, Actor bio, & Item description updating as well as possibly updating the stylesheets linked in the manifest.
-		console.groupCollapsed("Bulk replace CSS");
+		console.groupCollapsed("Uploading CSS to Imgur...");
 		const rules = [
 			...[...document.styleSheets].map(sheet => [...sheet.cssRules]).flat(), // Style sheets
 			...[...document.querySelectorAll("*")], // Elements
