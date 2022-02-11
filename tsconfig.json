@@ -1,8 +1,7 @@
 {
 	"compilerOptions": {
-		"typeRoots": [
-			"../node_modules/@types",
-			"../node_modules/@league-of-foundry-developers"
+		"types": [
+			"@league-of-foundry-developers/foundry-vtt-types"
 		],
 		"moduleResolution": "node",
 		"strict": true,
