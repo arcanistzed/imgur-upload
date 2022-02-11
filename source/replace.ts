@@ -1,7 +1,8 @@
 import upload from "./upload.js";
 
 /**
- * Bulk replace asset references
+ * Find and upload images to Imgur
+ * @param {boolean} [dryRun=true]
  */
 export default async function uploadImages(dryRun: boolean = true) {
 	if (
