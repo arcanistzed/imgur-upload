@@ -34,20 +34,28 @@ export default async function upload(path: string) {
 	const url = json.success ? json.data.link : null;
 
 	if (url) {
-		console.log(`Uploaded file at "${path}" to "${url}"`, {
-			response,
-			rateLimit,
-			json,
-			url,
-		});
+		console.log(
+			`%cUploaded file at "${path}" to "${url}"`,
+			"background-color: lightgreen; padding: 0.25rem",
+			{
+				response,
+				rateLimit,
+				json,
+				url,
+			}
+		);
 		return url;
 	} else {
-		console.error(`Error uploading file at "${path}": ${json.data.error}`, {
-			response,
-			rateLimit,
-			json,
-			url,
-		});
+		console.error(
+			`%cError uploading file at "${path}": ${json.data.error}`,
+			"background-color: lightcoral; padding: 0.25rem",
+			{
+				response,
+				rateLimit,
+				json,
+				url,
+			}
+		);
 		return null;
 	}
 }
