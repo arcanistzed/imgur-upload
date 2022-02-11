@@ -51,9 +51,9 @@ export default async function upload(path: string): Promise<string | null> {
 		);
 		return url;
 	} else {
-		console.error(
+		console.log(
 			`%cError uploading file at "${path}": ${json.data.error}`,
-			"background-color: lightcoral; padding: 0.25rem",
+			"background-color: lightcoral; font-weight: bold; padding: 0.25rem",
 			{
 				response,
 				rateLimit,
