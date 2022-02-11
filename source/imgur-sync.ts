@@ -1,4 +1,4 @@
-import uploadImages from "./replace.js";
+import uploadImages from "./upload.js";
 
 /* FIXME Do when button pressed instead */
 // @ts-expect-error
