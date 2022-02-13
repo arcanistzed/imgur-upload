@@ -130,6 +130,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 					}
 				}
 			}
+			await htmlFields(actor, domParser, find);
 			const itemUpdates = [];
 			let shownGroup = false;
 			for (const item of actor.data.items) {
@@ -149,6 +150,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 						});
 					}
 				}
+				await htmlFields(item, domParser, find);
 			}
 			if (shownGroup) {
 				console.groupEnd();
@@ -203,6 +205,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 					}
 				}
 			}
+			await htmlFields(item, domParser, find);
 			const effectUpdates = [];
 			let shownGroup = false;
 			for (const effect of item.data.effects) {
@@ -257,7 +260,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 					"text/html"
 				);
 				for (const link of doc.getElementsByTagName("img")) {
-					if (link.src?.startsWith(find)) {
+					if (link.src?.includes(find)) {
 						const uploaded = await upload(link.src);
 						if (uploaded) {
 							console.log(
@@ -265,7 +268,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 									link.src
 								} => ${link.src.replace(find, uploaded)}`
 							);
-							link.src.replace(find, uploaded);
+							link.src = link.src.replace(find, uploaded);
 							hasContentUpdate = true;
 						}
 					}
@@ -304,5 +307,57 @@ export default async function uploadImages(dryRun: boolean = true) {
 		}
 		console.groupEnd();
 		*/
+
+		/**
+		 * Uploads the images in the HTML fields of a given document
+		 * @param {Actor | Item} document
+		 * @param {DOMParser} domParser
+		 * @param {string} find
+		 */
+		async function htmlFields(
+			document: Actor | Item,
+			domParser: DOMParser,
+			find: string
+		) {
+			if (!(game instanceof Game)) return;
+
+			const fields = // @ts-expect-error
+				game.system.template[document.documentName]?.htmlFields;
+
+			if (fields && fields.length !== 0) {
+				for (const field of fields) {
+					const content = getProperty(document.data.data, field);
+					if (content) {
+						let hasContentUpdate = false;
+						const doc = domParser.parseFromString(
+							content,
+							"text/html"
+						);
+						for (const link of doc.getElementsByTagName("img")) {
+							if (link.src?.includes(find)) {
+								const uploaded = await upload(link.src);
+								if (uploaded) {
+									console.log(
+										`${document.name}.${field}.img: ${link.src
+										} => ${link.src.replace(
+											find,
+											uploaded
+										)}`
+									);
+									link.src = link.src.replace(find, uploaded);
+									hasContentUpdate = true;
+								}
+							}
+						}
+
+						if (hasContentUpdate && !dryRun) {
+							await document.update({
+								[`data.${field}`]: doc.body.innerHTML,
+							});
+						}
+					}
+				}
+			}
+		}
 	}
 }
