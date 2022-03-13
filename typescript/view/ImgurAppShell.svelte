@@ -37,6 +37,8 @@
 
 	ul {
 		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
 	}
 	li {
 		list-style: none;

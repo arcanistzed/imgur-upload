@@ -12,8 +12,6 @@ export default class ImgurApplication extends SvelteApplication {
 	static get defaultOptions() {
 		return foundry.utils.mergeObject(super.defaultOptions, {
 			title: "imgur-sync.application.title",
-			width: 300,
-
 			svelte: {
 				class: ImgurAppShell,
 				target: document.body,
