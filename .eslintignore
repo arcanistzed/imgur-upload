@@ -1,0 +1,6 @@
+.github/
+dist/
+languages/
+styles/
+templates/
+source/**/*.svelte

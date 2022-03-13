@@ -1,6 +1,8 @@
 import uploadImages from "./upload.js";
+import BasicApplication from './view/BasicApplication.js';
 
-/* FIXME Do when button pressed instead */
+Hooks.once('ready', () => new BasicApplication().render(true, { focus: true }));
+
 // @ts-expect-error
 Hooks.on("init", () => game.modules.get("imgur-sync").api = {
     run: uploadImages
