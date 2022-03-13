@@ -266,7 +266,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 							console.log(
 								`${journal.name}.img: ${
 									link.src
-								} => ${link.src.replace(find, uploaded)}`
+								} => ${link.src.replace(find, uploaded)}` //TODO: Don't use replace, override
 							);
 							link.src = link.src.replace(find, uploaded);
 							hasContentUpdate = true;
@@ -283,29 +283,12 @@ export default async function uploadImages(dryRun: boolean = true) {
 		}
 		console.groupEnd();
 
-		/* FIXME: Currently does not update source files. This should be plugged in to JE, Actor bio, & Item description updating as well as possibly updating the stylesheets linked in the manifest.
-		console.groupCollapsed("Uploading CSS to Imgur...");
-		const rules = [
-			...[...document.styleSheets].map(sheet => [...sheet.cssRules]).flat(), // Style sheets
-			...[...document.querySelectorAll("*")], // Elements
-		];
-		for (const rule of rules) {
-			[
-				"backgroundImage",
-				"listStyleImage",
-				"borderImageSource"
-			]
-				.forEach(location => {
-					if (rule.style?.[location]?.match(/url\(["']?([^"']*)["']?\)/i)?.[1]?.startsWith(find)) {
-						console.log(
-							`${rule.selectorText ?? rule.tagName}.style: ${rule.style?.[location]} => ${rule.style?.[location].replace(find, uploaded)}`
-						);
-						rule.style[location] = rule.style?.[location].replace(find, uploaded);
-						rule.cssText
-					}
-				});
-		}
-		console.groupEnd();
+		// TODO Style sheets (should be used for updating those linked in the world's manifest)
+		//[...document.styleSheets].map(sheet => [...sheet.cssRules]).flat()
+
+		/*
+		TODO unlinked token embedded actors
+		TODO remove some duplicate code above
 		*/
 
 		/**
@@ -346,6 +329,48 @@ export default async function uploadImages(dryRun: boolean = true) {
 									);
 									link.src = link.src.replace(find, uploaded);
 									hasContentUpdate = true;
+								}
+							}
+						}
+
+						for (const hasStyle of [
+							...[...doc.styleSheets]
+								.map(sheet => [...sheet.cssRules])
+								.flat(),
+							...doc.getElementsByTagName("*"),
+						]) {
+							if (
+								hasStyle instanceof CSSStyleRule ||
+								hasStyle instanceof HTMLElement
+							) {
+								for (const location of [
+									"backgroundImage",
+									"listStyleImage",
+									"borderImageSource",
+								] as const) {
+									const url = hasStyle.style?.[
+										location
+									]?.match(/url\(["']?([^"']*)["']?\)/i)?.[1];
+									if (url?.startsWith(find)) {
+										const uploaded = await upload(url);
+										if (uploaded) {
+											console.log(
+												`${(hasStyle as CSSStyleRule)
+													.selectorText ??
+												(hasStyle as HTMLElement)
+													.tagName
+												}.style: ${hasStyle.style?.[location]
+												} => ${hasStyle.style?.[
+													location
+												].replace(find, uploaded)}`
+											);
+											hasStyle.style[location] =
+												hasStyle.style?.[
+													location
+												].replace(find, uploaded);
+											hasContentUpdate = true;
+										}
+									}
 								}
 							}
 						}
