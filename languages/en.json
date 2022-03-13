@@ -1,5 +1,8 @@
 {
-    "NAME": {
-        "settings": {}
+    "imgur-sync": {
+        "settings": {},
+        "application": {
+            "title": "Imgur Sync"
+        }
     }
 }

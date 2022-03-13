@@ -3,4 +3,6 @@ dist/
 languages/
 styles/
 templates/
-source/**/*.svelte
+vanilla/**/*.svelte
+vanilla/*.js
+rollup.config.mjs

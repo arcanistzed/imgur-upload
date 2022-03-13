@@ -1,5 +1,8 @@
+// @ts-expect-error
+import BasicApplication from './view/application.js';
+import "../styles/main.scss";
+
 import uploadImages from "./upload.js";
-import BasicApplication from './view/BasicApplication.js';
 
 Hooks.once('ready', () => new BasicApplication().render(true, { focus: true }));
 

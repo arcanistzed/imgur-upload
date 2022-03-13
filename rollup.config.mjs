@@ -16,7 +16,7 @@ const s_TYPHONJS_MODULE_LIB = false;
 
 // Creates a standard configuration for PostCSS with autoprefixer & postcss-preset-env.
 const postcssMain = postcssConfig({
-	extract: "template-svelte-esm.css",
+	extract: "bundle.css",
 	compress: s_COMPRESS,
 	sourceMap: s_SOURCEMAPS,
 });
@@ -37,9 +37,9 @@ export default () => {
 	return [
 		{
 			// The main module bundle
-			input: `dist/imgur-sync.js`,
+			input: `vanilla/imgur-sync.js`,
 			output: {
-				file: `dist/template-svelte-esm.js`,
+				file: `dist/bundle.js`,
 				format: "es",
 				plugins: outputPlugins,
 				sourcemap,

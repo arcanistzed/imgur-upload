@@ -22,13 +22,9 @@
     "eslint": "^8",
     "rollup": "^2"
   },
-  "browserslist": [
-    ">5%",
-    "not IE 11"
-  ],
   "scripts": {
-    "build": "rollup --config",
-    "build-watch": "rollup --watch --config",
+    "build": "tsc --build; mkdir -p vanilla/view; cp typescript/view/* vanilla/view; rollup --config",
+    "build-watch": "tsc -w; mkdir -p vanilla/view; cp typescript/view/* vanilla/view; rollup --watch --config",
     "eslint": "eslint ."
   }
 }

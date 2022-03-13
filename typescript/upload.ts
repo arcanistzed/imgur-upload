@@ -21,8 +21,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 				const uploaded = await upload(scene.data.img);
 				if (uploaded) {
 					console.log(
-						`${scene.name}.img: ${
-							scene.data.img
+						`${scene.name}.img: ${scene.data.img
 						} => ${scene.data.img.replace(find, uploaded)}`
 					);
 					if (!dryRun) {
@@ -34,8 +33,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 				const uploaded = await upload(scene.data.foreground);
 				if (uploaded) {
 					console.log(
-						`${scene.name}.foreground: ${
-							scene.data.foreground
+						`${scene.name}.foreground: ${scene.data.foreground
 						} => ${scene.data.foreground.replace(find, uploaded)}`
 					);
 					if (!dryRun) {
@@ -56,8 +54,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 							shownGroup = true;
 						}
 						console.log(
-							`${token.name}.img: ${
-								token.data.img
+							`${token.name}.img: ${token.data.img
 							} => ${token.data.img.replace(find, uploaded)}`
 						);
 						tokenUpdates.push({
@@ -84,8 +81,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 							shownGroup = true;
 						}
 						console.log(
-							`tile.img: ${
-								tile.data.img
+							`tile.img: ${tile.data.img
 							} => ${tile.data.img.replace(find, uploaded)}`
 						);
 						tileUpdates.push({
@@ -110,8 +106,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 				const uploaded = await upload(actor.data.img);
 				if (uploaded) {
 					console.log(
-						`${actor.name}.img: ${
-							actor.data.img
+						`${actor.name}.img: ${actor.data.img
 						} => ${actor.data.img.replace(find, uploaded)}`
 					);
 					if (!dryRun) await actor.update({ img: uploaded });
@@ -196,8 +191,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 				const uploaded = await upload(item.data.img);
 				if (uploaded) {
 					console.log(
-						`${item.name}.img: ${
-							item.data.img
+						`${item.name}.img: ${item.data.img
 						} => ${item.data.img.replace(find, uploaded)}`
 					);
 					if (!dryRun) {
@@ -264,8 +258,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 						const uploaded = await upload(link.src);
 						if (uploaded) {
 							console.log(
-								`${journal.name}.img: ${
-									link.src
+								`${journal.name}.img: ${link.src
 								} => ${link.src.replace(find, uploaded)}` //TODO: Don't use replace, override
 							);
 							link.src = link.src.replace(find, uploaded);
