@@ -4,11 +4,13 @@
 <script lang="ts">
 	// @ts-expect-error
 	import { ApplicationShell } from "@typhonjs-fvtt/runtime/svelte/component/core";
-	export let elementRoot: any;
+	export let elementRoot: HTMLElement;
 
-	let name: string;
+	import uploadImages from "../upload.js";
+
+	let documentTypes: string[];
 	if (game instanceof Game) {
-		name = game.actors?.getName("Other")?.data.name ?? "";
+		documentTypes = Object.keys(game.system.documentTypes);
 	}
 </script>
 
@@ -16,14 +18,27 @@
 <!-- ApplicationShell exports `elementRoot` which is the outer application shell element -->
 <ApplicationShell bind:elementRoot>
 	<main>
-		<span>{name}</span>
+		<ul>
+			<!-- svelte-ignore missing-declaration -->
+			{#each documentTypes as document}
+				<li><label><input type="checkbox" />{document}</label></li>
+			{/each}
+		</ul>
+
+		<button on:click={() => uploadImages(false)}><i class="fas fa-photo-video" /> Imgur Upload</button>
 	</main>
 </ApplicationShell>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	main {
-		text-align: center;
 		display: flex;
 		flex-direction: column;
+	}
+
+	ul {
+		padding: 0;
+	}
+	li {
+		list-style: none;
 	}
 </style>
