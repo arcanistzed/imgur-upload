@@ -5,7 +5,7 @@ import upload from "./helpers.js";
  * @param {boolean} [dryRun=true]
  */
 export default async function uploadImages(dryRun: boolean = true) {
-	if (game instanceof Game && game.scenes && game.actors && game.items && game.journal) {
+	if (game.scenes && game.actors && game.items && game.journal) {
 		const find = `worlds/${game.world.id}`;
 		const domParser = new DOMParser();
 
@@ -162,8 +162,6 @@ export default async function uploadImages(dryRun: boolean = true) {
 		 * @param {string} find
 		 */
 		async function htmlFields(doc: Actor | Item, domParser: DOMParser, find: string) {
-			if (!(game instanceof Game)) return;
-
 			// @ts-expect-error
 			const fields = game.system.template[doc.documentName]?.htmlFields;
 

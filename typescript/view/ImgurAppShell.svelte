@@ -8,10 +8,7 @@
 
 	import uploadImages from "../upload.js";
 
-	let documentTypes: string[];
-	if (game instanceof Game) {
-		documentTypes = Object.keys(game.system.documentTypes);
-	}
+	const documentTypes = Object.keys(game.system.documentTypes);
 </script>
 
 <!-- ApplicationShell provides the popOut / application shell frame, header bar, content areas -->
