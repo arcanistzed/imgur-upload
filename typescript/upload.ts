@@ -276,13 +276,9 @@ export default async function uploadImages(dryRun: boolean = true) {
 		}
 		console.groupEnd();
 
-		// TODO Style sheets (should be used for updating those linked in the world's manifest)
+		// TODO v2 - Style sheets (should be used for updating those linked in the world's manifest)
 		//[...document.styleSheets].map(sheet => [...sheet.cssRules]).flat()
-
-		/*
-		TODO unlinked token embedded actors
-		TODO remove some duplicate code above
-		*/
+		// TODO v2 - remove some duplicate code above
 
 		/**
 		 * Uploads the images in the HTML fields of a given document
