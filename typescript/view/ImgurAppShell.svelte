@@ -21,7 +21,8 @@
 				<li><label><input type="checkbox" />{document}</label></li>
 			{/each}
 		</ul>
-
+		<hr />
+		<label><input type="checkbox" name="css">Parse CSS?</label>
 		<button on:click={() => uploadImages(false)}><i class="fas fa-photo-video" /> Imgur Upload</button>
 	</main>
 </ApplicationShell>
