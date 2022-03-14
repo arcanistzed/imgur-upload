@@ -11,31 +11,8 @@ export default async function uploadImages(dryRun: boolean = true) {
 
 		console.groupCollapsed("Uploading scenes to Imgur...");
 		for (const scene of game.scenes) {
-			if (scene.data.img?.startsWith(find)) {
-				const uploaded = await upload(scene.data.img);
-				if (uploaded) {
-					console.log(`${scene.name}.img: ${scene.data.img} => ${scene.data.img.replace(find, uploaded)}`);
-					if (!dryRun) {
-						await scene.update({ img: uploaded });
-					}
-				}
-			}
-			if (scene.data.foreground?.startsWith(find)) {
-				const uploaded = await upload(scene.data.foreground);
-				if (uploaded) {
-					console.log(
-						`${scene.name}.foreground: ${scene.data.foreground} => ${scene.data.foreground.replace(
-							find,
-							uploaded
-						)}`
-					);
-					if (!dryRun) {
-						await scene.update({
-							img: scene.data.foreground.replace(find, uploaded),
-						});
-					}
-				}
-			}
+			simple(scene);
+			simple(scene, "foreground");
 			const tokenUpdates = [];
 			let shownGroup = false;
 			for (const token of scene.tokens) {
@@ -54,6 +31,11 @@ export default async function uploadImages(dryRun: boolean = true) {
 							img: uploaded,
 						});
 					}
+				}
+
+				// Update prototype token images of unlinked tokens
+				if (token.actor?.isToken) {
+					// runAsActor();
 				}
 			}
 			if (shownGroup) {
@@ -91,13 +73,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 
 		console.groupCollapsed("Uploading actors to Imgur...");
 		for (const actor of game.actors) {
-			if (actor.data.img?.startsWith(find)) {
-				const uploaded = await upload(actor.data.img);
-				if (uploaded) {
-					console.log(`${actor.name}.img: ${actor.data.img} => ${actor.data.img.replace(find, uploaded)}`);
-					if (!dryRun) await actor.update({ img: uploaded });
-				}
-			}
+			simple(actor);
 			if (actor.data.token.img?.startsWith(find)) {
 				const uploaded = await upload(actor.data.token.img);
 				if (uploaded) {
@@ -135,85 +111,21 @@ export default async function uploadImages(dryRun: boolean = true) {
 			if (itemUpdates.length && !dryRun) {
 				await actor.updateEmbeddedDocuments("Item", itemUpdates);
 			}
-			const effectUpdates = [];
-			shownGroup = false;
-			for (const effect of actor.data.effects) {
-				if (effect.data.icon?.startsWith(find)) {
-					const uploaded = upload(effect.data.icon);
-					if (uploaded) {
-						if (!shownGroup) {
-							console.groupCollapsed(`${actor.name} effects`);
-							shownGroup = true;
-						}
-						console.log(`${actor.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`);
-						effectUpdates.push({
-							_id: effect.id,
-							img: uploaded,
-						});
-					}
-				}
-			}
-			if (shownGroup) {
-				console.groupEnd();
-			}
-			if (effectUpdates.length && !dryRun) {
-				await actor.updateEmbeddedDocuments("ActiveEffect", effectUpdates);
-			}
+			await effects(actor);
 		}
 		console.groupEnd();
 
 		console.groupCollapsed("Uploading items to Imgur...");
 		for (const item of game.items) {
-			if (item.data.img?.startsWith(find)) {
-				const uploaded = await upload(item.data.img);
-				if (uploaded) {
-					console.log(`${item.name}.img: ${item.data.img} => ${item.data.img.replace(find, uploaded)}`);
-					if (!dryRun) {
-						await item.update({ img: uploaded });
-					}
-				}
-			}
+			await simple(item);
 			await htmlFields(item, domParser, find);
-			const effectUpdates = [];
-			let shownGroup = false;
-			for (const effect of item.data.effects) {
-				if (effect.data.icon?.startsWith(find)) {
-					const uploaded = upload(effect.data.icon);
-					if (uploaded) {
-						if (!shownGroup) {
-							console.groupCollapsed(`${item.name} effects`);
-							shownGroup = true;
-						}
-						console.log(`${item.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`);
-						effectUpdates.push({
-							_id: effect.id,
-							img: uploaded,
-						});
-					}
-				}
-			}
-			if (shownGroup) {
-				console.groupEnd();
-			}
-			if (effectUpdates.length && !dryRun) {
-				await item.updateEmbeddedDocuments("ActiveEffect", effectUpdates);
-			}
+			await effects(item);
 		}
 		console.groupEnd();
 
 		console.groupCollapsed("Uploading journals to Imgur...");
 		for (const journal of game.journal) {
-			if (journal.data.img?.startsWith(find)) {
-				const uploaded = await upload(journal.data.img);
-				if (uploaded) {
-					console.log(`${journal.name}.img: ${journal.data.img} => ${uploaded}`);
-					if (!dryRun) {
-						await journal.update({
-							img: uploaded,
-						});
-					}
-				}
-			}
+			simple(journal);
 			if (journal.data.content) {
 				let hasContentUpdate = false;
 				const doc = domParser.parseFromString(journal.data.content, "text/html");
@@ -316,6 +228,48 @@ export default async function uploadImages(dryRun: boolean = true) {
 						}
 					}
 				}
+			}
+		}
+
+		async function simple(doc: StoredDocument<Scene> | StoredDocument<Actor> | StoredDocument<Item> | StoredDocument<JournalEntry>, path: "img" | "foreground" = "img") {
+			// @ts-expect-error
+			const value: string = doc.data[path];
+			if (value?.startsWith(find)) {
+				const uploaded = await upload(value);
+				if (uploaded) {
+					console.log(`${doc.name}.${path}: ${value} => ${uploaded}`);
+					if (!dryRun) {
+						await doc.update({ [path]: uploaded });
+					}
+				}
+			}
+		}
+
+		//TODO can use this? as one generic function for embedded tiles, tokens, items
+		async function effects(doc: StoredDocument<Actor> | StoredDocument<Item>) {
+			const effectUpdates = [];
+			let shownGroup = false;
+			for (const effect of doc.data.effects) {
+				if (effect.data.icon?.startsWith(find)) {
+					const uploaded = upload(effect.data.icon);
+					if (uploaded) {
+						if (!shownGroup) {
+							console.groupCollapsed(`${doc.name} effects`);
+							shownGroup = true;
+						}
+						console.log(`${doc.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`);
+						effectUpdates.push({
+							_id: effect.id,
+							img: uploaded,
+						});
+					}
+				}
+			}
+			if (shownGroup) {
+				console.groupEnd();
+			}
+			if (effectUpdates.length && !dryRun) {
+				await doc.updateEmbeddedDocuments("ActiveEffect", effectUpdates);
 			}
 		}
 	}
