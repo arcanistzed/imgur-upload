@@ -245,28 +245,28 @@ export default async function uploadImages(dryRun: boolean = true) {
 
 		/**
 		 * Uploads the images in the HTML fields of a given document
-		 * @param {Actor | Item} document
+		 * @param {Actor | Item} doc
 		 * @param {DOMParser} domParser
 		 * @param {string} find
 		 */
-		async function htmlFields(document: Actor | Item, domParser: DOMParser, find: string) {
+		async function htmlFields(doc: Actor | Item, domParser: DOMParser, find: string) {
 			if (!(game instanceof Game)) return;
 
 			// @ts-expect-error
-			const fields = game.system.template[document.documentName]?.htmlFields;
+			const fields = game.system.template[doc.documentName]?.htmlFields;
 
 			if (fields && fields.length !== 0) {
 				for (const field of fields) {
-					const content = getProperty(document.data.data, field);
+					const content = getProperty(doc.data.data, field);
 					if (content) {
 						let hasContentUpdate = false;
-						const doc = domParser.parseFromString(content, "text/html");
-						for (const link of doc.getElementsByTagName("img")) {
+						const html = domParser.parseFromString(content, "text/html");
+						for (const link of html.getElementsByTagName("img")) {
 							if (link.src?.includes(find)) {
 								const uploaded = await upload(link.src);
 								if (uploaded) {
 									console.log(
-										`${document.name}.${field}.img: ${link.src} => ${link.src.replace(
+										`${doc.name}.${field}.img: ${link.src} => ${link.src.replace(
 											find,
 											uploaded
 										)}`
@@ -278,8 +278,8 @@ export default async function uploadImages(dryRun: boolean = true) {
 						}
 
 						for (const hasStyle of [
-							...[...doc.styleSheets].map(sheet => [...sheet.cssRules]).flat(),
-							...doc.getElementsByTagName("*"),
+							...[...html.styleSheets].map(sheet => [...sheet.cssRules]).flat(),
+							...html.getElementsByTagName("*"),
 						]) {
 							if (hasStyle instanceof CSSStyleRule || hasStyle instanceof HTMLElement) {
 								for (const location of [
@@ -310,8 +310,8 @@ export default async function uploadImages(dryRun: boolean = true) {
 						}
 
 						if (hasContentUpdate && !dryRun) {
-							await document.update({
-								[`data.${field}`]: doc.body.innerHTML,
+							await doc.update({
+								[`data.${field}`]: html.body.innerHTML,
 							});
 						}
 					}
