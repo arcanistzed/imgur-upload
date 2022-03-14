@@ -5,13 +5,7 @@ import upload from "./helpers.js";
  * @param {boolean} [dryRun=true]
  */
 export default async function uploadImages(dryRun: boolean = true) {
-	if (
-		game instanceof Game &&
-		game.scenes &&
-		game.actors &&
-		game.items &&
-		game.journal
-	) {
+	if (game instanceof Game && game.scenes && game.actors && game.items && game.journal) {
 		const find = `worlds/${game.world.id}`;
 		const domParser = new DOMParser();
 
@@ -20,10 +14,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 			if (scene.data.img?.startsWith(find)) {
 				const uploaded = await upload(scene.data.img);
 				if (uploaded) {
-					console.log(
-						`${scene.name}.img: ${scene.data.img
-						} => ${scene.data.img.replace(find, uploaded)}`
-					);
+					console.log(`${scene.name}.img: ${scene.data.img} => ${scene.data.img.replace(find, uploaded)}`);
 					if (!dryRun) {
 						await scene.update({ img: uploaded });
 					}
@@ -33,8 +24,10 @@ export default async function uploadImages(dryRun: boolean = true) {
 				const uploaded = await upload(scene.data.foreground);
 				if (uploaded) {
 					console.log(
-						`${scene.name}.foreground: ${scene.data.foreground
-						} => ${scene.data.foreground.replace(find, uploaded)}`
+						`${scene.name}.foreground: ${scene.data.foreground} => ${scene.data.foreground.replace(
+							find,
+							uploaded
+						)}`
 					);
 					if (!dryRun) {
 						await scene.update({
@@ -54,8 +47,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 							shownGroup = true;
 						}
 						console.log(
-							`${token.name}.img: ${token.data.img
-							} => ${token.data.img.replace(find, uploaded)}`
+							`${token.name}.img: ${token.data.img} => ${token.data.img.replace(find, uploaded)}`
 						);
 						tokenUpdates.push({
 							_id: token.id,
@@ -80,10 +72,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 							console.groupCollapsed(`${scene.name} tiles`);
 							shownGroup = true;
 						}
-						console.log(
-							`tile.img: ${tile.data.img
-							} => ${tile.data.img.replace(find, uploaded)}`
-						);
+						console.log(`tile.img: ${tile.data.img} => ${tile.data.img.replace(find, uploaded)}`);
 						tileUpdates.push({
 							_id: tile.id,
 							img: uploaded,
@@ -105,19 +94,14 @@ export default async function uploadImages(dryRun: boolean = true) {
 			if (actor.data.img?.startsWith(find)) {
 				const uploaded = await upload(actor.data.img);
 				if (uploaded) {
-					console.log(
-						`${actor.name}.img: ${actor.data.img
-						} => ${actor.data.img.replace(find, uploaded)}`
-					);
+					console.log(`${actor.name}.img: ${actor.data.img} => ${actor.data.img.replace(find, uploaded)}`);
 					if (!dryRun) await actor.update({ img: uploaded });
 				}
 			}
 			if (actor.data.token.img?.startsWith(find)) {
 				const uploaded = await upload(actor.data.token.img);
 				if (uploaded) {
-					console.log(
-						`${actor.data.token.name}.token.img: ${actor.data.token.img} => ${uploaded}`
-					);
+					console.log(`${actor.data.token.name}.token.img: ${actor.data.token.img} => ${uploaded}`);
 					if (!dryRun) {
 						await actor.update({
 							token: { img: uploaded },
@@ -136,9 +120,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 							console.groupCollapsed(`${actor.name} tokens`);
 							shownGroup = true;
 						}
-						console.log(
-							`${actor.name} ${item.name} item.img: ${item.data.img} => ${uploaded}`
-						);
+						console.log(`${actor.name} ${item.name} item.img: ${item.data.img} => ${uploaded}`);
 						itemUpdates.push({
 							_id: item.id,
 							img: uploaded,
@@ -163,9 +145,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 							console.groupCollapsed(`${actor.name} effects`);
 							shownGroup = true;
 						}
-						console.log(
-							`${actor.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`
-						);
+						console.log(`${actor.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`);
 						effectUpdates.push({
 							_id: effect.id,
 							img: uploaded,
@@ -177,10 +157,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 				console.groupEnd();
 			}
 			if (effectUpdates.length && !dryRun) {
-				await actor.updateEmbeddedDocuments(
-					"ActiveEffect",
-					effectUpdates
-				);
+				await actor.updateEmbeddedDocuments("ActiveEffect", effectUpdates);
 			}
 		}
 		console.groupEnd();
@@ -190,10 +167,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 			if (item.data.img?.startsWith(find)) {
 				const uploaded = await upload(item.data.img);
 				if (uploaded) {
-					console.log(
-						`${item.name}.img: ${item.data.img
-						} => ${item.data.img.replace(find, uploaded)}`
-					);
+					console.log(`${item.name}.img: ${item.data.img} => ${item.data.img.replace(find, uploaded)}`);
 					if (!dryRun) {
 						await item.update({ img: uploaded });
 					}
@@ -210,9 +184,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 							console.groupCollapsed(`${item.name} effects`);
 							shownGroup = true;
 						}
-						console.log(
-							`${item.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`
-						);
+						console.log(`${item.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`);
 						effectUpdates.push({
 							_id: effect.id,
 							img: uploaded,
@@ -224,10 +196,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 				console.groupEnd();
 			}
 			if (effectUpdates.length && !dryRun) {
-				await item.updateEmbeddedDocuments(
-					"ActiveEffect",
-					effectUpdates
-				);
+				await item.updateEmbeddedDocuments("ActiveEffect", effectUpdates);
 			}
 		}
 		console.groupEnd();
@@ -237,9 +206,7 @@ export default async function uploadImages(dryRun: boolean = true) {
 			if (journal.data.img?.startsWith(find)) {
 				const uploaded = await upload(journal.data.img);
 				if (uploaded) {
-					console.log(
-						`${journal.name}.img: ${journal.data.img} => ${uploaded}`
-					);
+					console.log(`${journal.name}.img: ${journal.data.img} => ${uploaded}`);
 					if (!dryRun) {
 						await journal.update({
 							img: uploaded,
@@ -249,17 +216,13 @@ export default async function uploadImages(dryRun: boolean = true) {
 			}
 			if (journal.data.content) {
 				let hasContentUpdate = false;
-				const doc = domParser.parseFromString(
-					journal.data.content,
-					"text/html"
-				);
+				const doc = domParser.parseFromString(journal.data.content, "text/html");
 				for (const link of doc.getElementsByTagName("img")) {
 					if (link.src?.includes(find)) {
 						const uploaded = await upload(link.src);
 						if (uploaded) {
 							console.log(
-								`${journal.name}.img: ${link.src
-								} => ${link.src.replace(find, uploaded)}` //TODO: Don't use replace, override
+								`${journal.name}.img: ${link.src} => ${link.src.replace(find, uploaded)}` //TODO: Don't use replace, override
 							);
 							link.src = link.src.replace(find, uploaded);
 							hasContentUpdate = true;
@@ -286,32 +249,24 @@ export default async function uploadImages(dryRun: boolean = true) {
 		 * @param {DOMParser} domParser
 		 * @param {string} find
 		 */
-		async function htmlFields(
-			document: Actor | Item,
-			domParser: DOMParser,
-			find: string
-		) {
+		async function htmlFields(document: Actor | Item, domParser: DOMParser, find: string) {
 			if (!(game instanceof Game)) return;
 
-			const fields = // @ts-expect-error
-				game.system.template[document.documentName]?.htmlFields;
+			// @ts-expect-error
+			const fields = game.system.template[document.documentName]?.htmlFields;
 
 			if (fields && fields.length !== 0) {
 				for (const field of fields) {
 					const content = getProperty(document.data.data, field);
 					if (content) {
 						let hasContentUpdate = false;
-						const doc = domParser.parseFromString(
-							content,
-							"text/html"
-						);
+						const doc = domParser.parseFromString(content, "text/html");
 						for (const link of doc.getElementsByTagName("img")) {
 							if (link.src?.includes(find)) {
 								const uploaded = await upload(link.src);
 								if (uploaded) {
 									console.log(
-										`${document.name}.${field}.img: ${link.src
-										} => ${link.src.replace(
+										`${document.name}.${field}.img: ${link.src} => ${link.src.replace(
 											find,
 											uploaded
 										)}`
@@ -323,40 +278,30 @@ export default async function uploadImages(dryRun: boolean = true) {
 						}
 
 						for (const hasStyle of [
-							...[...doc.styleSheets]
-								.map(sheet => [...sheet.cssRules])
-								.flat(),
+							...[...doc.styleSheets].map(sheet => [...sheet.cssRules]).flat(),
 							...doc.getElementsByTagName("*"),
 						]) {
-							if (
-								hasStyle instanceof CSSStyleRule ||
-								hasStyle instanceof HTMLElement
-							) {
+							if (hasStyle instanceof CSSStyleRule || hasStyle instanceof HTMLElement) {
 								for (const location of [
 									"backgroundImage",
 									"listStyleImage",
 									"borderImageSource",
 								] as const) {
-									const url = hasStyle.style?.[
-										location
-									]?.match(/url\(["']?([^"']*)["']?\)/i)?.[1];
+									const url = hasStyle.style?.[location]?.match(/url\(["']?([^"']*)["']?\)/i)?.[1];
 									if (url?.startsWith(find)) {
 										const uploaded = await upload(url);
 										if (uploaded) {
 											console.log(
-												`${(hasStyle as CSSStyleRule)
-													.selectorText ??
-												(hasStyle as HTMLElement)
-													.tagName
-												}.style: ${hasStyle.style?.[location]
-												} => ${hasStyle.style?.[
+												`${(hasStyle as CSSStyleRule).selectorText ??
+												(hasStyle as HTMLElement).tagName
+												}.style: ${hasStyle.style?.[location]} => ${hasStyle.style?.[
 													location
 												].replace(find, uploaded)}`
 											);
-											hasStyle.style[location] =
-												hasStyle.style?.[
-													location
-												].replace(find, uploaded);
+											hasStyle.style[location] = hasStyle.style?.[location].replace(
+												find,
+												uploaded
+											);
 											hasContentUpdate = true;
 										}
 									}
