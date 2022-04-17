@@ -11,8 +11,8 @@ export default async function uploadImages(dryRun: boolean = true) {
 
 		console.groupCollapsed("Uploading scenes to Imgur...");
 		for (const scene of game.scenes) {
-			simple(scene);
-			simple(scene, "foreground");
+			await simple(scene);
+			await simple(scene, "foreground");
 			const tokenUpdates = [];
 			let shownGroup = false;
 			for (const token of scene.tokens) {
