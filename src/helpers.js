@@ -1,9 +1,11 @@
 /**
  * Upload the image at a given path to Imgur and return the new URL
+ * 
  * @param {string} path - The current path to the image
- * @return {Promise<string | null>} - The new path to the uploaded image, or null if the image was not successfully uploaded
+ * 
+ * @returns {Promise<string | null>} - The new path to the uploaded image, or null if the image was not successfully uploaded
  */
-export default async function upload(path: string): Promise<string | null> {
+export default async function upload(path) {
 	const clientID = "c8f504ae93f9a0d";
 
 	const blob = await (await fetch(path)).blob();
@@ -16,9 +18,9 @@ export default async function upload(path: string): Promise<string | null> {
 
 	const options = {
 		method: "POST",
-		headers: headers,
+		headers,
 		body: formData,
-		redirect: "follow" as const,
+		redirect: "follow",
 	};
 
 	let response;
@@ -30,7 +32,7 @@ export default async function upload(path: string): Promise<string | null> {
 	}
 
 	const rateLimit = Object.fromEntries(
-		[...response.headers.entries()].filter(h =>
+		[...response.headers.entries()].filter((h) =>
 			h[0].startsWith("x-ratelimit")
 		)
 	);

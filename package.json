@@ -23,8 +23,8 @@
     "rollup": "^2"
   },
   "scripts": {
-    "build": "tsc --build; mkdir -p vanilla/view; cp typescript/view/* vanilla/view; rollup --config",
-    "build-watch": "tsc -w; mkdir -p vanilla/view; cp typescript/view/* vanilla/view; rollup --watch --config",
+    "build": "rollup --config",
+    "build-watch": "rollup --watch --config",
     "eslint": "eslint ."
   }
 }

@@ -2,7 +2,7 @@
   "name": "imgur-sync",
   "title": "Imgur Sync",
   "description": "A module for syncing your assets to Imgur",
-  "author": "Arcanist, Ethck",
+  "author": "Arcanist",
   "authors": [
     {
       "name": "Arcanist",
@@ -10,10 +10,6 @@
       "email": "arcanistzed@gmail.com",
       "discord": "arcanist#4317",
       "reddit": "u/arcanistzed"
-    },
-    {
-      "name": "Ethck",
-      "discord": "Ethck#6879"
     }
   ],
   "url": "This is auto replaced",

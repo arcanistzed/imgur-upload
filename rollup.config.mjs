@@ -37,7 +37,7 @@ export default () => {
 	return [
 		{
 			// The main module bundle
-			input: `vanilla/imgur-sync.js`,
+			input: `src/imgur-sync.js`,
 			output: {
 				file: `dist/bundle.js`,
 				format: "es",

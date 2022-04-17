@@ -2,7 +2,7 @@ import { SvelteApplication } from "@typhonjs-fvtt/runtime/svelte/application";
 // @ts-ignore
 import ImgurAppShell from "./ImgurAppShell.svelte";
 
-export default class ImgurApplication extends SvelteApplication {
+export default class ImgurSyncConfig extends SvelteApplication {
 	/**
 	 * Default Application options
 	 *
