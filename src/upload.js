@@ -1,13 +1,17 @@
+/* eslint-disable curly */
+/* eslint-disable jsdoc/newline-after-description */
+/* eslint-disable jsdoc/tag-lines */
+
 import upload from "./helpers.js";
 
 const domParser = new DOMParser();
 
 /**
  * Find and upload images to Imgur
- *
+ * @param {boolean} [parseHTML=true] Whether to parse HTML fields
  * @param {boolean} [dryRun=true] Whether to save changes
  */
-export default async function uploadImages(dryRun = true) {
+export default async function uploadImages(parseHTML = true, dryRun = true) {
 	const search = `worlds/${game.world.id}`;
 	if (game.scenes && game.actors && game.items && game.journal) {
 		console.groupCollapsed("Uploading scenes to Imgur...");
@@ -39,9 +43,7 @@ export default async function uploadImages(dryRun = true) {
 					// runAsActor();
 				}
 			}
-			if (shownGroup) {
-				console.groupEnd();
-			}
+			if (shownGroup) console.groupEnd();
 			if (tokenUpdates.length && !dryRun) {
 				await scene.updateEmbeddedDocuments("Token", tokenUpdates);
 			}
@@ -63,9 +65,7 @@ export default async function uploadImages(dryRun = true) {
 					}
 				}
 			}
-			if (shownGroup) {
-				console.groupEnd();
-			}
+			if (shownGroup) console.groupEnd();
 			if (tileUpdates.length && !dryRun) {
 				await scene.updateEmbeddedDocuments("Tile", tileUpdates);
 			}
@@ -86,7 +86,7 @@ export default async function uploadImages(dryRun = true) {
 					}
 				}
 			}
-			await htmlFields(actor, search, dryRun);
+			if (parseHTML) await htmlFields(actor, search, dryRun);
 			const itemUpdates = [];
 			let shownGroup = false;
 			for (const item of actor.data.items) {
@@ -104,11 +104,9 @@ export default async function uploadImages(dryRun = true) {
 						});
 					}
 				}
-				await htmlFields(item, search, dryRun);
+				if (parseHTML) await htmlFields(item, search, dryRun);
 			}
-			if (shownGroup) {
-				console.groupEnd();
-			}
+			if (shownGroup) console.groupEnd();
 			if (itemUpdates.length && !dryRun) {
 				await actor.updateEmbeddedDocuments("Item", itemUpdates);
 			}
@@ -119,7 +117,7 @@ export default async function uploadImages(dryRun = true) {
 		console.groupCollapsed("Uploading items to Imgur...");
 		for (const item of game.items) {
 			await simple(item, search, dryRun);
-			await htmlFields(item, search, dryRun);
+			if (parseHTML) await htmlFields(item, search, dryRun);
 			await effects(item, search, dryRun);
 		}
 		console.groupEnd();
@@ -160,11 +158,8 @@ export default async function uploadImages(dryRun = true) {
 
 /**
  * Uploads the images in the HTML fields of a given document
- *
  * @param {Actor | Item} doc The document to search
- *
  * @param {string} search The string to search for
- *
  * @param {boolean} dryRun Whether to save changes
  */
 async function htmlFields(doc, search, dryRun) {
@@ -224,13 +219,9 @@ async function htmlFields(doc, search, dryRun) {
 
 /**
  * Upload the image for the given document
- *
  * @param {Scene | Actor | Item | Journal} doc The document to work with
- *
  * @param {string} search The string to search for
- *
  * @param {*} dryRun Whether to save changes
- *
  * @param {string} [path="img"] The path to the image property
  */
 async function simple(doc, search, dryRun, path = "img") {
@@ -248,14 +239,10 @@ async function simple(doc, search, dryRun, path = "img") {
 
 /**
  * Upload effects
- *
  * @param {Actor | Item} doc The document to work with
- *
  * @param {string} search The string to search for
- *
  * @param {*} dryRun Whether to save changes
- *
- * TODO: is it possible to use this as one generic function for embedded tiles, tokens, items?
+ * TODO: is it possible to also use this as one generic function for embedded tiles, tokens, items?
  */
 async function effects(doc, search, dryRun) {
 	const effectUpdates = [];
@@ -276,9 +263,7 @@ async function effects(doc, search, dryRun) {
 			}
 		}
 	}
-	if (shownGroup) {
-		console.groupEnd();
-	}
+	if (shownGroup) console.groupEnd();
 	if (effectUpdates.length && !dryRun) {
 		await doc.updateEmbeddedDocuments("ActiveEffect", effectUpdates);
 	}
