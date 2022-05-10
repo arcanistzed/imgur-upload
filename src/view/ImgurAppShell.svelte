@@ -1,42 +1,21 @@
-<!-- This is necessary for Svelte to generate accessors TRL can access for `elementRoot` -->
 <svelte:options accessors={true} />
 
 <script>
 	import { ApplicationShell } from "@typhonjs-fvtt/runtime/svelte/component/core";
+	import DocumentGrid from "./DocumentGrid.svelte";
+	import Controls from "./Controls.svelte";
+
 	export let elementRoot;
 	import uploadImages from "../upload.js";
 
-	let allSelected = false;
-	let selected = {};
-	function toggleSelection() {
-		// Toggle variable
-		allSelected = !allSelected;
-		// Update selection state for all documents
-		documentTypes.forEach(d => (selected[d] = allSelected ? true : false));
-	}
-
 	let dryRun = true;
 	let parseHTML = true;
-	const documentTypes = Object.keys(game.system.documentTypes);
 </script>
 
-<!-- ApplicationShell provides the popOut / application shell frame, header bar, content areas -->
-<!-- ApplicationShell exports `elementRoot` which is the outer application shell element -->
 <ApplicationShell bind:elementRoot>
 	<main>
-		<div class="controls">
-			<button class="toggle" type="button" on:click={toggleSelection}>
-				{allSelected ? "Deselect All" : "Select All"}
-			</button>
-		</div>
-		<ul>
-			{#each documentTypes as document}
-				<li>
-					<input id="imgur-sync-document-{document}" type="checkbox" bind:checked={selected[document]} />
-					<label for="imgur-sync-document-{document}">{document}</label>
-				</li>
-			{/each}
-		</ul>
+		<Controls />
+		<DocumentGrid />
 		<hr />
 		<div class="form-group">
 			<input id="imgur-sync-parse-html" type="checkbox" name="html" bind:checked={parseHTML} />
@@ -51,28 +30,9 @@
 	</main>
 </ApplicationShell>
 
-<style lang="scss" scoped>
+<style scoped>
 	main {
 		display: flex;
 		flex-direction: column;
-	}
-
-	.controls {
-		display: flex;
-		justify-content: flex-end;
-	}
-
-	.toggle {
-		background: none;
-		width: fit-content;
-	}
-
-	ul {
-		padding: 0;
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr;
-	}
-	li {
-		list-style: none;
 	}
 </style>
