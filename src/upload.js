@@ -185,7 +185,7 @@ async function htmlFields(doc, search, dryRun) {
 				}
 
 				for (const hasStyle of [
-					...[...html.styleSheets].map((sheet) => [...sheet.cssRules]).flat(),
+					...[...html.styleSheets].map(sheet => [...sheet.cssRules]).flat(),
 					...html.getElementsByTagName("*"),
 				]) {
 					if (hasStyle instanceof CSSStyleRule || hasStyle instanceof HTMLElement) {

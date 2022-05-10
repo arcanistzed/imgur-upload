@@ -1,8 +1,7 @@
 import { SvelteApplication } from "@typhonjs-fvtt/runtime/svelte/application";
-// @ts-ignore
-import ImgurAppShell from "./ImgurAppShell.svelte";
+import ImgurSyncShell from "./ImgurSync.svelte";
 
-export default class ImgurSyncConfig extends SvelteApplication {
+export default class ImgurSync extends SvelteApplication {
 	/**
 	 * Default Application options
 	 *
@@ -13,7 +12,7 @@ export default class ImgurSyncConfig extends SvelteApplication {
 		return foundry.utils.mergeObject(super.defaultOptions, {
 			title: "imgur-sync.application.title",
 			svelte: {
-				class: ImgurAppShell,
+				class: ImgurSyncShell,
 				target: document.body,
 			},
 		});

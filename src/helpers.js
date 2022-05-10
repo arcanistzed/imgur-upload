@@ -32,7 +32,7 @@ export default async function upload(path) {
 	}
 
 	const rateLimit = Object.fromEntries(
-		[...response.headers.entries()].filter((h) =>
+		[...response.headers.entries()].filter(h =>
 			h[0].startsWith("x-ratelimit")
 		)
 	);
