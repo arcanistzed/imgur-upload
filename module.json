@@ -25,10 +25,10 @@
   "compatibleCoreVersion": "9",
   "scripts": [],
   "esmodules": [
-    "dist/bundle.js"
+    "dist/imgur-sync.js"
   ],
   "styles": [
-    "dist/bundle.css"
+    "dist/imgur-sync.css"
   ],
   "languages": [
     {

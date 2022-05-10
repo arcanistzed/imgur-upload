@@ -6,40 +6,36 @@ import preprocess from "svelte-preprocess";
 import { terser } from "rollup-plugin-terser"; // Terser is used for minification / mangling
 import { postcssConfig, terserConfig, typhonjsRuntime } from "@typhonjs-fvtt/runtime/rollup";
 
-const s_COMPRESS = false; // Set to true to compress the module bundle.
-const s_SOURCEMAPS = true; // Generate sourcemaps for the bundle (recommended).
+const PRODUCTION = process.env.BUILD === "production";
 
-// Set to true to enable linking against the TyphonJS Runtime Library module.
-// You must add a Foundry module dependency on the `typhonjs` Foundry package or manually install it in Foundry from:
-// https://github.com/typhonjs-fvtt-lib/typhonjs/releases/latest/download/module.json
-const s_TYPHONJS_MODULE_LIB = false;
+const COMPRESS = PRODUCTION; // Compress the module bundle in production mode
+const SOURCEMAPS = PRODUCTION; // Generate sourcemaps for the bundle
 
-// Creates a standard configuration for PostCSS with autoprefixer & postcss-preset-env.
+// Creates a standard configuration for PostCSS
 const postcssMain = postcssConfig({
-	extract: "bundle.css",
-	compress: s_COMPRESS,
-	sourceMap: s_SOURCEMAPS,
+	extract: "imgur-sync.css",
+	compress: COMPRESS,
+	sourceMap: SOURCEMAPS,
 });
 
-const s_RESOLVE_CONFIG = {
+const RESOLVE_CONFIG = {
 	browser: true,
 	dedupe: ["svelte"],
 };
 
 export default () => {
-	// Defines potential output plugins to use conditionally if the .env file indicates the bundles should be
-	// minified / mangled.
-	const outputPlugins = s_COMPRESS ? [terser(terserConfig())] : [];
+	// Defines potential output plugins to use conditionally
+	const outputPlugins = COMPRESS ? [terser(terserConfig())] : [];
 
-	// Defines whether source maps are generated / loaded.
-	const sourcemap = s_SOURCEMAPS;
+	// Defines whether source maps are generated
+	const sourcemap = SOURCEMAPS;
 
 	return [
 		{
 			// The main module bundle
-			input: `src/imgur-sync.js`,
+			input: `src/init.js`,
 			output: {
-				file: `dist/bundle.js`,
+				file: `dist/imgur-sync.js`,
 				format: "es",
 				plugins: outputPlugins,
 				sourcemap,
@@ -54,25 +50,39 @@ export default () => {
 							return;
 						}
 
-						// Let Rollup handle all other warnings normally.
+						// Let Rollup handle all other warnings normally
 						handler(warning);
 					},
 				}),
 
 				postcss(postcssMain),
 
-				resolve(s_RESOLVE_CONFIG),
+				resolve(RESOLVE_CONFIG),
 
-				// When s_TYPHONJS_MODULE_LIB is true transpile against the Foundry module version of TRL.
-				s_TYPHONJS_MODULE_LIB && typhonjsRuntime(),
-
-				babel({
-					babelHelpers: "bundled",
-					presets: [
-						["@babel/preset-env", { bugfixes: true, shippedProposals: true, targets: { esmodules: true } }],
-					],
-				}),
+				// Transpile only for production builds
+				PRODUCTION &&
+					babel({
+						babelHelpers: "bundled",
+						presets: [
+							[
+								"@babel/preset-env",
+								{ bugfixes: true, shippedProposals: true, targets: { esmodules: true } },
+							],
+						],
+					}),
 			],
+			onwarn(warning, warn) {
+				// Suppress warning from library code
+				if (
+					warning.code === "THIS_IS_UNDEFINED" &&
+					warning.loc.file.includes("node_modules/@google-web-components/google-chart/google-chart.js")
+				) {
+					return;
+				}
+
+				// Use default for everything else
+				warn(warning);
+			},
 		},
 	];
 };

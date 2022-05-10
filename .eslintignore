@@ -4,5 +4,4 @@ languages/
 styles/
 templates/
 src/**/*.svelte
-src/*.js
 rollup.config.mjs
