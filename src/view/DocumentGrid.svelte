@@ -1,12 +1,15 @@
 <script>
-	let selected = {};
+	import Toggle from "./Toggle.svelte";
+
 	const documentTypes = Object.keys(game.system.documentTypes);
+	let selection = Object.fromEntries(documentTypes.map(k => [k, false ]));
 </script>
 
+<Toggle bind:selection={selection} />
 <ul>
 	{#each documentTypes as document}
 		<li>
-			<input id="imgur-sync-document-{document}" type="checkbox" bind:checked={selected[document]} />
+			<input id="imgur-sync-document-{document}" type="checkbox" bind:checked={selection[document]} />
 			<label for="imgur-sync-document-{document}">{document}</label>
 		</li>
 	{/each}

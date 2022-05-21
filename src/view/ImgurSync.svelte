@@ -3,7 +3,6 @@
 <script>
 	import { ApplicationShell } from "@typhonjs-fvtt/runtime/svelte/component/core";
 	import DocumentGrid from "./DocumentGrid.svelte";
-	import Controls from "./Controls.svelte";
 
 	export let elementRoot;
 	import uploadImages from "../upload.js";
@@ -14,7 +13,6 @@
 
 <ApplicationShell bind:elementRoot>
 	<main>
-		<Controls />
 		<DocumentGrid />
 		<hr />
 		<div class="form-group">

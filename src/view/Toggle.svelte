@@ -1,23 +1,26 @@
 <script>
-	let allSelected = false;
-	let selected = {};
-	const documentTypes = Object.keys(game.system.documentTypes);
+	let state = false;
+	export let selection = {};
 
 	function toggleSelection() {
-		// Toggle variable
-		allSelected = !allSelected;
+		// Toggle state
+		state = !state;
+
 		// Update selection state for all documents
-		documentTypes.forEach(d => (selected[d] = allSelected ? true : false));
+		for (const document in selection) {
+			selection[document] = state ? true : false;
+		}
 	}
 </script>
 
 <button type="button" on:click={toggleSelection}>
-	{allSelected ? "Deselect All" : "Select All"}
+	{state ? "Deselect All" : "Select All"}
 </button>
 
 <style lang="scss" scoped>
 	button {
 		background: none;
 		width: fit-content;
+		align-self: end;
 	}
 </style>
