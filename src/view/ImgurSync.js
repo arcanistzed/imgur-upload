@@ -1,5 +1,6 @@
 import { SvelteApplication } from "@typhonjs-fvtt/runtime/svelte/application";
 import ImgurSyncShell from "./ImgurSync.svelte";
+import ProgressBar from "./ProgressBar.svelte";
 
 export default class ImgurSync extends SvelteApplication {
 	/**
@@ -15,6 +16,14 @@ export default class ImgurSync extends SvelteApplication {
 				class: ImgurSyncShell,
 				target: document.body,
 			},
+			headerNoTitleMinimized: true,
 		});
+	}
+
+	/** @inheritdoc */
+	_getHeaderButtons() {
+		const buttons = super._getHeaderButtons();
+		buttons.unshift(ProgressBar);
+		return buttons;
 	}
 }
