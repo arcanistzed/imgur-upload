@@ -15,7 +15,7 @@
 	{/each}
 </ul>
 
-<style lang="scss" scoped>
+<style scoped>
 	ul {
 		padding: 0;
 		display: grid;

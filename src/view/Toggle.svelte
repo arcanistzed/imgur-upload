@@ -17,7 +17,7 @@
 	{state ? "Deselect All" : "Select All"}
 </button>
 
-<style lang="scss" scoped>
+<style scoped>
 	button {
 		background: none;
 		width: fit-content;
