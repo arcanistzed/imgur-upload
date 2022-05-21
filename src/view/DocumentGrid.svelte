@@ -9,8 +9,8 @@
 <ul>
 	{#each documentTypes as document}
 		<li>
-			<input id="imgur-sync-document-{document}" type="checkbox" bind:checked={selection[document]} />
-			<label for="imgur-sync-document-{document}">{document}</label>
+			<input id="imgur-upload-document-{document}" type="checkbox" bind:checked={selection[document]} />
+			<label for="imgur-upload-document-{document}">{document}</label>
 		</li>
 	{/each}
 </ul>

@@ -1,8 +1,8 @@
 {
-    "imgur-sync": {
+    "imgur-upload": {
         "settings": {},
         "application": {
-            "title": "Imgur Sync"
+            "title": "Imgur Upload"
         }
     }
 }

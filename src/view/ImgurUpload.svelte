@@ -16,12 +16,12 @@
 		<DocumentGrid />
 		<hr />
 		<div class="form-group">
-			<input id="imgur-sync-parse-html" type="checkbox" name="html" bind:checked={parseHTML} />
-			<label for="imgur-sync-parse-html">Parse HTML?</label>
+			<input id="imgur-upload-parse-html" type="checkbox" name="html" bind:checked={parseHTML} />
+			<label for="imgur-upload-parse-html">Parse HTML?</label>
 		</div>
 		<div class="form-group">
-			<input id="imgur-sync-dry-run" type="checkbox" name="dryrun" bind:checked={dryRun} />
-			<label for="imgur-sync-dry-run">Dry Run?</label>
+			<input id="imgur-upload-dry-run" type="checkbox" name="dryrun" bind:checked={dryRun} />
+			<label for="imgur-upload-dry-run">Dry Run?</label>
 		</div>
 		<hr />
 		<button on:click={() => uploadImages(parseHTML, dryRun)}><i class="fas fa-photo-video" /> Imgur Upload</button>

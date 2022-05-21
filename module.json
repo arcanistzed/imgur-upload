@@ -1,7 +1,7 @@
 {
-  "name": "imgur-sync",
-  "title": "Imgur Sync",
-  "description": "A module for syncing your assets to Imgur",
+  "name": "imgur-upload",
+  "title": "Imgur Upload",
+  "description": "Upload your image assets to Imgur",
   "author": "Arcanist",
   "authors": [
     {
@@ -13,10 +13,10 @@
     }
   ],
   "url": "This is auto replaced",
-  "license": "https://github.com/arcanistzed/imgur-sync/blob/main/LICENSE",
-  "readme": "https://github.com/arcanistzed/imgur-sync/blob/main/README.md",
-  "bugs": "https://github.com/arcanistzed/imgur-sync/issues/new/choose",
-  "changelog": "https://github.com/arcanistzed/imgur-sync/blob/main/CHANGELOG.md",
+  "license": "https://github.com/arcanistzed/imgur-upload/blob/main/LICENSE",
+  "readme": "https://github.com/arcanistzed/imgur-upload/blob/main/README.md",
+  "bugs": "https://github.com/arcanistzed/imgur-upload/issues/new/choose",
+  "changelog": "https://github.com/arcanistzed/imgur-upload/blob/main/CHANGELOG.md",
   "flags": {
     "allowBugReporter": true
   },
@@ -25,10 +25,10 @@
   "compatibleCoreVersion": "9",
   "scripts": [],
   "esmodules": [
-    "dist/imgur-sync.js"
+    "dist/imgur-upload.js"
   ],
   "styles": [
-    "dist/imgur-sync.css"
+    "dist/imgur-upload.css"
   ],
   "languages": [
     {

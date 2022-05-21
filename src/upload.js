@@ -12,8 +12,18 @@ const domParser = new DOMParser();
  * @param {boolean} [dryRun=true] Whether to save changes
  */
 export default async function uploadImages(parseHTML = true, dryRun = true) {
+
+	// TODO finalize list & test regex; make configurable in GUI; replace `search` with this
+	// Formats supported by Imgur (TODO add the actual formats)
+	const supportedImageFileExtensions = [/* "png", "jpg", "jpeg", "webp", "tif", "tiff" */];
+	// Don't include already hosted assets
+	const exclusionPattern = /^https?:\/\/$/i;
+
 	const search = `worlds/${game.world.id}`;
 	if (game.scenes && game.actors && game.items && game.journal) {
+		console.log(
+			`Imgur Upload has begun...\nSearching for files currently stored in ${search}\nParse HTML: ${parseHTML}\nDry Run: ${dryRun}`
+		);
 		console.groupCollapsed("Uploading scenes to Imgur...");
 		for (const scene of game.scenes) {
 			await simple(scene, search, dryRun);

@@ -1,6 +1,6 @@
 {
-  "name": "imgur-sync",
-  "description": "A module for syncing your assets to Imgur.",
+  "name": "imgur-upload",
+  "description": "Upload your image assets to Imgur",
   "license": "MIT",
   "private": true,
   "type": "module",

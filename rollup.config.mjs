@@ -13,7 +13,7 @@ const SOURCEMAPS = PRODUCTION; // Generate sourcemaps for the bundle
 
 // Creates a standard configuration for PostCSS
 const postcssMain = postcssConfig({
-	extract: "imgur-sync.css",
+	extract: "imgur-upload.css",
 	compress: COMPRESS,
 	sourceMap: SOURCEMAPS,
 });
@@ -35,7 +35,7 @@ export default () => {
 			// The main module bundle
 			input: `src/init.js`,
 			output: {
-				file: `dist/imgur-sync.js`,
+				file: `dist/imgur-upload.js`,
 				format: "es",
 				plugins: outputPlugins,
 				sourcemap,

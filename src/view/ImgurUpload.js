@@ -1,8 +1,8 @@
 import { SvelteApplication } from "@typhonjs-fvtt/runtime/svelte/application";
-import ImgurSyncShell from "./ImgurSync.svelte";
+import ImgurUploadShell from "./ImgurUpload.svelte";
 import ProgressBar from "./ProgressBar.svelte";
 
-export default class ImgurSync extends SvelteApplication {
+export default class ImgurUpload extends SvelteApplication {
 	/**
 	 * Default Application options
 	 *
@@ -11,9 +11,9 @@ export default class ImgurSync extends SvelteApplication {
 	 */
 	static get defaultOptions() {
 		return foundry.utils.mergeObject(super.defaultOptions, {
-			title: "imgur-sync.application.title",
+			title: "imgur-upload.application.title",
 			svelte: {
-				class: ImgurSyncShell,
+				class: ImgurUploadShell,
 				target: document.body,
 			},
 			headerNoTitleMinimized: true,
