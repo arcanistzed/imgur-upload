@@ -1,10 +1,11 @@
-/* eslint-disable curly */
-/* eslint-disable jsdoc/newline-after-description */
-/* eslint-disable jsdoc/tag-lines */
+// @ts-nocheck
 
 import upload from "./helpers.js";
 
 const domParser = new DOMParser();
+
+// Don't include already hosted assets
+const pattern = /^https?:\/\/$/i;
 
 /**
  * Find and upload images to Imgur
@@ -13,166 +14,83 @@ const domParser = new DOMParser();
  */
 export default async function uploadImages(parseHTML = true, dryRun = true) {
 
-	// TODO finalize list & test regex; make configurable in GUI; replace `search` with this
-	// Formats supported by Imgur (TODO add the actual formats)
-	const supportedImageFileExtensions = [/* "png", "jpg", "jpeg", "webp", "tif", "tiff" */];
-	// Don't include already hosted assets
-	const exclusionPattern = /^https?:\/\/$/i;
+	console.log(`Imgur Upload has begun...\n\nParse HTML: ${parseHTML}\nDry Run: ${dryRun}`);
 
-	const search = `worlds/${game.world.id}`;
-	if (game.scenes && game.actors && game.items && game.journal) {
-		console.log(
-			`Imgur Upload has begun...\nSearching for files currently stored in ${search}\nParse HTML: ${parseHTML}\nDry Run: ${dryRun}`
-		);
-		console.groupCollapsed("Uploading scenes to Imgur...");
-		for (const scene of game.scenes) {
-			await simple(scene, search, dryRun);
-			await simple(scene, search, dryRun, "foreground");
-			const tokenUpdates = [];
-			let shownGroup = false;
-			for (const token of scene.tokens) {
-				if (token.data.img?.startsWith(search)) {
-					const uploaded = await upload(token.data.img);
-					if (uploaded) {
-						if (!shownGroup) {
-							console.groupCollapsed(`${scene.name} tokens`);
-							shownGroup = true;
-						}
-						console.log(
-							`${token.name}.img: ${token.data.img} => ${token.data.img.replace(search, uploaded)}`
-						);
-						tokenUpdates.push({
-							_id: token.id,
-							img: uploaded,
-						});
-					}
-				}
+	console.groupCollapsed("Uploading scenes to Imgur...");
+	for (const scene of game.scenes) {
+		await simple(scene);
+		await simple(scene, "foreground");
+		embedded(scene, "tokens", "img", "TokenDocument");
+		embedded(scene, "tiles", "img", "Tile");
+	}
+	console.groupEnd();
 
-				// Update prototype token images of unlinked tokens
-				if (token.actor?.isToken) {
-					// runAsActor();
-				}
-			}
-			if (shownGroup) console.groupEnd();
-			if (tokenUpdates.length && !dryRun) {
-				await scene.updateEmbeddedDocuments("Token", tokenUpdates);
-			}
-			const tileUpdates = [];
-			shownGroup = false;
-			for (const tile of scene.tiles) {
-				if (tile.data.img?.startsWith(search)) {
-					const uploaded = await upload(tile.data.img);
-					if (uploaded) {
-						if (!shownGroup) {
-							console.groupCollapsed(`${scene.name} tiles`);
-							shownGroup = true;
-						}
-						console.log(`tile.img: ${tile.data.img} => ${tile.data.img.replace(search, uploaded)}`);
-						tileUpdates.push({
-							_id: tile.id,
-							img: uploaded,
-						});
-					}
-				}
-			}
-			if (shownGroup) console.groupEnd();
-			if (tileUpdates.length && !dryRun) {
-				await scene.updateEmbeddedDocuments("Tile", tileUpdates);
-			}
-		}
-		console.groupEnd();
-
-		console.groupCollapsed("Uploading actors to Imgur...");
-		for (const actor of game.actors) {
-			await simple(actor, search, dryRun);
-			if (actor.data.token.img?.startsWith(search)) {
-				const uploaded = await upload(actor.data.token.img);
-				if (uploaded) {
-					console.log(`${actor.data.token.name}.token.img: ${actor.data.token.img} => ${uploaded}`);
-					if (!dryRun) {
-						await actor.update({
-							token: { img: uploaded },
-						});
-					}
-				}
-			}
-			if (parseHTML) await htmlFields(actor, search, dryRun);
-			const itemUpdates = [];
-			let shownGroup = false;
-			for (const item of actor.data.items) {
-				if (item.data.img?.startsWith(search)) {
-					const uploaded = await upload(item.data.img);
-					if (uploaded) {
-						if (!shownGroup) {
-							console.groupCollapsed(`${actor.name} tokens`);
-							shownGroup = true;
-						}
-						console.log(`${actor.name} ${item.name} item.img: ${item.data.img} => ${uploaded}`);
-						itemUpdates.push({
-							_id: item.id,
-							img: uploaded,
-						});
-					}
-				}
-				if (parseHTML) await htmlFields(item, search, dryRun);
-			}
-			if (shownGroup) console.groupEnd();
-			if (itemUpdates.length && !dryRun) {
-				await actor.updateEmbeddedDocuments("Item", itemUpdates);
-			}
-			await effects(actor, search, dryRun);
-		}
-		console.groupEnd();
-
-		console.groupCollapsed("Uploading items to Imgur...");
-		for (const item of game.items) {
-			await simple(item, search, dryRun);
-			if (parseHTML) await htmlFields(item, search, dryRun);
-			await effects(item, search, dryRun);
-		}
-		console.groupEnd();
-
-		console.groupCollapsed("Uploading journals to Imgur...");
-		for (const journal of game.journal) {
-			await simple(journal, search, dryRun);
-			if (journal.data.content) {
-				let hasContentUpdate = false;
-				const doc = domParser.parseFromString(journal.data.content, "text/html");
-				for (const link of doc.getElementsByTagName("img")) {
-					if (link.src?.includes(search)) {
-						const uploaded = await upload(link.src);
-						if (uploaded) {
-							console.log(
-								`${journal.name}.img: ${link.src} => ${link.src.replace(search, uploaded)}` // TODO: Don't use replace, override
-							);
-							link.src = link.src.replace(search, uploaded);
-							hasContentUpdate = true;
-						}
-					}
-				}
-
-				if (hasContentUpdate && !dryRun) {
-					await journal.update({
-						content: doc.body.innerHTML,
+	console.groupCollapsed("Uploading actors to Imgur...");
+	for (const actor of game.actors) {
+		await simple(actor);
+		if (actor.data.token.img?.match(pattern)) {
+			const uploaded = await upload(actor.data.token.img);
+			if (uploaded) {
+				console.log(`${actor.data.token.name}.token.img: ${actor.data.token.img} => ${uploaded}`);
+				if (!dryRun) {
+					await actor.update({
+						token: { img: uploaded },
 					});
 				}
 			}
 		}
-		console.groupEnd();
-
-		// TODO v2 - Style sheets (should be used for updating those linked in the world's manifest)
-		// [...document.styleSheets].map(sheet => [...sheet.cssRules]).flat()
-		// TODO v2 - remove some duplicate code above
+		if (parseHTML) await htmlFields(actor);
+		await embedded(actor, "data.items", "img", "Item");
+		await embedded(actor, "data.effects", "icon", "ActiveEffect");
 	}
+	console.groupEnd();
+
+	console.groupCollapsed("Uploading items to Imgur...");
+	for (const item of game.items) {
+		await simple(item);
+		if (parseHTML) await htmlFields(item);
+		await embedded(item, "data.effects", "icon", "ActiveEffect");
+	}
+	console.groupEnd();
+
+	console.groupCollapsed("Uploading journals to Imgur...");
+	for (const journal of game.journal) {
+		await simple(journal);
+		if (journal.data.content) {
+			let hasContentUpdate = false;
+			const doc = domParser.parseFromString(journal.data.content, "text/html");
+			for (const link of doc.getElementsByTagName("img")) {
+				if (link.src?.match(pattern)) {
+					const uploaded = await upload(link.src);
+					if (uploaded) {
+						console.log(
+							`${journal.name}.img: ${link.src} => ${uploaded}`
+						);
+						link.src = uploaded;
+						hasContentUpdate = true;
+					}
+				}
+			}
+
+			if (hasContentUpdate && !dryRun) {
+				await journal.update({
+					content: doc.body.innerHTML,
+				});
+			}
+		}
+	}
+	console.groupEnd();
+
+	// TODO v2 - Style sheets (should be used for updating those linked in the world's manifest)
+	// [...document.styleSheets].map(sheet => [...sheet.cssRules]).flat()
+	// TODO v2 - remove some duplicate code above
 }
 
 /**
  * Uploads the images in the HTML fields of a given document
- * @param {Actor | Item} doc The document to search
- * @param {string} search The string to search for
- * @param {boolean} dryRun Whether to save changes
+ * @param {Actor | Item} doc The document to update
  */
-async function htmlFields(doc, search, dryRun) {
+async function htmlFields(doc) {
 	const fields = game.system.template[doc.documentName]?.htmlFields;
 
 	if (fields && fields.length !== 0) {
@@ -182,13 +100,13 @@ async function htmlFields(doc, search, dryRun) {
 				let hasContentUpdate = false;
 				const html = domParser.parseFromString(content, "text/html");
 				for (const link of html.getElementsByTagName("img")) {
-					if (link.src?.includes(search)) {
+					if (link.src?.match(pattern)) {
 						const uploaded = await upload(link.src);
 						if (uploaded) {
 							console.log(
-								`${doc.name}.${field}.img: ${link.src} => ${link.src.replace(search, uploaded)}`
+								`${doc.name}.${field}.img: ${link.src} => ${uploaded}`
 							);
-							link.src = link.src.replace(search, uploaded);
+							link.src = uploaded;
 							hasContentUpdate = true;
 						}
 					}
@@ -201,15 +119,15 @@ async function htmlFields(doc, search, dryRun) {
 					if (hasStyle instanceof CSSStyleRule || hasStyle instanceof HTMLElement) {
 						for (const property of ["backgroundImage", "listStyleImage", "borderImageSource"]) {
 							const url = hasStyle.style?.[property]?.match(/url\(["']?([^"']*)["']?\)/i)?.[1];
-							if (url?.startsWith(search)) {
+							if (url?.match(pattern)) {
 								const uploaded = await upload(url);
 								if (uploaded) {
 									console.log(
 										`${hasStyle.selectorText ?? hasStyle.tagName}.style: ${
 											hasStyle.style?.[property]
-										} => ${hasStyle.style?.[property].replace(search, uploaded)}`
+										} => ${uploaded}`
 									);
-									hasStyle.style[property] = hasStyle.style?.[property].replace(search, uploaded);
+									hasStyle.style[property] = uploaded;
 									hasContentUpdate = true;
 								}
 							}
@@ -230,13 +148,11 @@ async function htmlFields(doc, search, dryRun) {
 /**
  * Upload the image for the given document
  * @param {Scene | Actor | Item | Journal} doc The document to work with
- * @param {string} search The string to search for
- * @param {*} dryRun Whether to save changes
  * @param {string} [path="img"] The path to the image property
  */
-async function simple(doc, search, dryRun, path = "img") {
+async function simple(doc, path = "img") {
 	const value = doc.data[path];
-	if (value?.startsWith(search)) {
+	if (value?.match(pattern)) {
 		const uploaded = await upload(value);
 		if (uploaded) {
 			console.log(`${doc.name}.${path}: ${value} => ${uploaded}`);
@@ -248,33 +164,32 @@ async function simple(doc, search, dryRun, path = "img") {
 }
 
 /**
- * Upload effects
+ * Upload embedded
  * @param {Actor | Item} doc The document to work with
- * @param {string} search The string to search for
- * @param {*} dryRun Whether to save changes
- * TODO: is it possible to also use this as one generic function for embedded tiles, tokens, items?
+ * @param {string} collectionPath The path of the embedded documents collection
  */
-async function effects(doc, search, dryRun) {
-	const effectUpdates = [];
+async function embedded(doc, collectionPath, assetPath, documentType) {
+	const updates = [];
 	let shownGroup = false;
-	for (const effect of doc.data.effects) {
-		if (effect.data.icon?.startsWith(search)) {
-			const uploaded = upload(effect.data.icon);
+	for (const eDoc of getProperty(doc, collectionPath)) {
+		if (eDoc.data[assetPath]?.match(pattern)) {
+			const uploaded = upload(eDoc.data[assetPath]);
 			if (uploaded) {
 				if (!shownGroup) {
-					console.groupCollapsed(`${doc.name} effects`);
+					console.groupCollapsed(`${doc.name} ${collectionPath}`);
 					shownGroup = true;
 				}
-				console.log(`${doc.name} ${effect.name} effect.img: ${effect.data.icon} => ${uploaded}`);
-				effectUpdates.push({
-					_id: effect.id,
+				console.log(`${doc.name} ${eDoc.name} ${collectionPath}: ${eDoc.data[assetPath]} => ${uploaded}`);
+				updates.push({
+					_id: eDoc.id,
 					img: uploaded,
 				});
 			}
 		}
+		if (parseHTML) await htmlFields(eDoc);
 	}
 	if (shownGroup) console.groupEnd();
-	if (effectUpdates.length && !dryRun) {
-		await doc.updateEmbeddedDocuments("ActiveEffect", effectUpdates);
+	if (updates.length && !dryRun) {
+		await doc.updateEmbeddedDocuments(documentType, updates);
 	}
 }
