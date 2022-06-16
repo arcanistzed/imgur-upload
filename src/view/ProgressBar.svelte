@@ -5,7 +5,7 @@
 
 <progress class="keep-minimized" />
 
-<style scoped>
+<style>
 	progress {
 		margin: auto;
 		accent-color: var(--color-border-highlight, orangered);

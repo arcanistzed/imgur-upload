@@ -28,7 +28,7 @@
 	</main>
 </ApplicationShell>
 
-<style scoped>
+<style>
 	main {
 		display: flex;
 		flex-direction: column;
