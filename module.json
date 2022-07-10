@@ -1,8 +1,8 @@
 {
+  "id": "imgur-upload",
   "name": "imgur-upload",
   "title": "Imgur Upload",
   "description": "Upload your image assets to Imgur",
-  "author": "Arcanist",
   "authors": [
     {
       "name": "Arcanist",
@@ -21,8 +21,12 @@
     "allowBugReporter": true
   },
   "version": "This is auto replaced",
+  "compatibility": {
+    "minimum": "9",
+    "verified": "10"
+  },
   "minimumCoreVersion": "9",
-  "compatibleCoreVersion": "9",
+  "compatibleCoreVersion": "10",
   "scripts": [],
   "esmodules": [
     "dist/imgur-upload.js"
@@ -39,7 +43,6 @@
   ],
   "packs": [],
   "system": [],
-  "dependencies": [],
   "manifest": "This is auto replaced",
   "download": "This is auto replaced",
   "library": false,
