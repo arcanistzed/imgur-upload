@@ -1,56 +1,56 @@
 {
-  "id": "imgur-upload",
-  "name": "imgur-upload",
-  "title": "Imgur Upload",
-  "description": "Upload your image assets to Imgur",
-  "authors": [
-    {
-      "name": "Arcanist",
-      "url": "https://arcanist.me",
-      "email": "arcanistzed@gmail.com",
-      "discord": "arcanist#4317",
-      "reddit": "u/arcanistzed"
-    }
-  ],
-  "url": "This is auto replaced",
-  "license": "https://github.com/arcanistzed/imgur-upload/blob/main/LICENSE",
-  "readme": "https://github.com/arcanistzed/imgur-upload/blob/main/README.md",
-  "bugs": "https://github.com/arcanistzed/imgur-upload/issues/new/choose",
-  "changelog": "https://github.com/arcanistzed/imgur-upload/blob/main/CHANGELOG.md",
-  "flags": {
-    "allowBugReporter": true
-  },
-  "version": "This is auto replaced",
-  "compatibility": {
-    "minimum": "9",
-    "verified": "10"
-  },
-  "minimumCoreVersion": "9",
-  "compatibleCoreVersion": "10",
-  "scripts": [],
-  "esmodules": [
-    "dist/imgur-upload.js"
-  ],
-  "styles": [
-    "dist/imgur-upload.css"
-  ],
-  "languages": [
-    {
-      "lang": "en",
-      "name": "English",
-      "path": "languages/en.json"
-    }
-  ],
-  "packs": [],
-  "system": [],
-  "manifest": "This is auto replaced",
-  "download": "This is auto replaced",
-  "library": false,
-  "manifestPlusVersion": "1.2.0",
-  "media": [
-    {
-      "type": "cover",
-      "url": ""
-    }
-  ]
+    "id": "imgur-upload",
+    "name": "imgur-upload",
+    "title": "Imgur Upload",
+    "description": "Upload your image assets to Imgur",
+    "authors": [
+        {
+            "name": "Arcanist",
+            "url": "https://arcanist.me",
+            "email": "arcanistzed@gmail.com",
+            "discord": "arcanist#4317",
+            "reddit": "u/arcanistzed"
+        }
+    ],
+    "url": "This is auto replaced",
+    "license": "https://github.com/arcanistzed/imgur-upload/blob/main/LICENSE",
+    "readme": "https://github.com/arcanistzed/imgur-upload/blob/main/README.md",
+    "bugs": "https://github.com/arcanistzed/imgur-upload/issues/new/choose",
+    "changelog": "https://github.com/arcanistzed/imgur-upload/blob/main/CHANGELOG.md",
+    "flags": {
+        "allowBugReporter": true
+    },
+    "version": "This is auto replaced",
+    "compatibility": {
+        "minimum": "9",
+        "verified": "10"
+    },
+    "minimumCoreVersion": "9",
+    "compatibleCoreVersion": "10",
+    "scripts": [],
+    "esmodules": [
+        "dist/imgur-upload.js"
+    ],
+    "styles": [
+        "dist/imgur-upload.css"
+    ],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "languages/en.json"
+        }
+    ],
+    "packs": [],
+    "system": [],
+    "manifest": "This is auto replaced",
+    "download": "This is auto replaced",
+    "library": false,
+    "manifestPlusVersion": "1.2.0",
+    "media": [
+        {
+            "type": "cover",
+            "url": ""
+        }
+    ]
 }
