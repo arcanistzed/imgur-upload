@@ -1,0 +1,54 @@
+actors.img
+actors.prototypeToken.texture.src
+actors.effects.icon
+actors.items ...
+actor.system.details.biography.value
+
+adventures.img
+adventures.caption ...
+adventures.description ...
+adventures.actors ...
+adventures.combats ...
+adventures.items ...
+adventures.scenes ...
+adventures.journal ...
+adventures.tables ...
+adventures.macros ...
+adventures.cards ...
+adventures.playlists ...
+adventures.folders ...
+
+cards.img
+cards.cards.back.img
+cards.cards.faces.img
+
+items.img
+items.effects.icon
+items.system.description.value
+
+journal.pages.src
+journal.pages.text.content
+journal.pages.text.markdown
+
+macros.img
+
+messages.content
+messages.sound
+
+playlists.sounds.path
+
+scenes.background.src
+scenes.foreground
+scenes.thumb
+
+scenes.drawings.texture
+scenes.templates.texture
+scenes.notes.texture.src
+scenes.tiles.texture.src
+scenes.tokens.texture.src
+scenes.tokens.actor ...
+
+tables.img
+tables.results.img
+
+users.avatar

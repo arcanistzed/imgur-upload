@@ -4,6 +4,9 @@ import upload from "./helpers.js";
 
 const domParser = new DOMParser();
 
+// TODO make configurable in GUI
+// Formats supported by Imgur (TODO add the actual formats)
+const supportedImageFileExtensions = ["png", "jpg", "jpeg", "webp", "tif", "tiff"];
 // Don't include already hosted assets
 const pattern = /^https?:\/\/$/i;
 
@@ -192,4 +195,88 @@ async function embedded(doc, collectionPath, assetPath, documentType) {
 	if (updates.length && !dryRun) {
 		await doc.updateEmbeddedDocuments(documentType, updates);
 	}
+}
+
+const globalTree = {
+	actors: [
+		"img",
+		"prototypeToken.texture.src",
+		{
+			effects: ["icon"],
+			items: [
+				"img",
+				{
+					effects: ["icon"],
+				},
+			],
+		},
+	],
+	cards: [
+		"img",
+		{
+			cards: ["back.img", "faces.*.img"],
+		},
+	],
+	items: [
+		"img",
+		{
+			effects: ["icon"],
+		},
+	],
+	journal: [{ pages: ["src", "text.content"] }],
+	macros: ["img"],
+	scenes: [
+		"background.src",
+		"foreground",
+		"thumb",
+		{
+			drawings: ["texture"],
+			notes: ["texture.src"],
+			templates: ["texture"],
+			tiles: ["texture.src"],
+			tokens: [
+				"texture.src",
+				"actor.img",
+				{				
+					"actor.effects": ["icon"],
+					"actor.items": [
+						"img",
+						{
+							effects: ["icon"],
+						},
+					],
+				},
+			],
+		},
+	],
+	tables: ["img", {
+		results: ["img"]
+	}],
+	users: ["avatar"],
+};
+
+crawl(globalTree);
+
+function crawl(tree, parent = game) {
+	for (const type in tree) {
+		const topLevel = tree[type].filter(isTopLevel);
+		const embedded = tree[type].filter(isEmbedded)[0];
+		for (const doc of parent[type]) {
+			for (const path of topLevel) exec(doc, path);
+			if (embedded) crawl(embedded, doc);
+		}
+	}
+}
+
+function isTopLevel(path) {
+	return typeof path === "string";
+}
+
+function isEmbedded(path) {
+	return typeof path === "object";
+}
+
+function exec(path) {
+	console.log(`Upload ${path}`);
+	// ...
 }

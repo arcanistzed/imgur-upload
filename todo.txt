@@ -1,0 +1,6 @@
+Worked through the essential implementation for Svelte components in the header. Added a new reactive app option `headerNoTitleMinimized` hides the title in minimized state
+To keep any given button / Svelte component add the `keep-minimized` class to the top level element.
+
+In the `_getHeaderButtons` callback you can add a Svelte component by just adding the class: buttons.unshift(ProgressBar);
+
+You can access the shared external context `const application = getContext('external').application;` in the script section of the Svelte component to get the Foundry / SvelteApplication instance for any external data. You can't pass props into a header button Svelte component at this time.
